@@ -3,9 +3,9 @@
 import { deleteBasicKanji, saveBasicKanji } from "@/actions/kanji-actions";
 import { ChangeEvent, useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { initialState } from "./init-state";
 import { KanjiItem } from "@/db/schema";
 import { useRouter } from "next/navigation";
+import { initialState } from "@/components/forms/init-state";
 
 export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
   const router = useRouter();
@@ -63,7 +63,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
             name="kanji"
             value={formState.kanji}
             onChange={handleChange}
-            placeholder="kanji"
+            placeholder="漢字"
             className="outline-none border-none h-full text-4xl px-4 bg-foreground/20 box-border w-full"
           />
         </div>
@@ -74,7 +74,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
             name="kunyomi"
             value={formState.kunyomi}
             onChange={handleChange}
-            placeholder="kunyomi"
+            placeholder="訓読み"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
           <input
@@ -82,7 +82,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
             name="onyomi"
             value={formState.onyomi}
             onChange={handleChange}
-            placeholder="onyomi"
+            placeholder="音読み"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
         </div>
@@ -93,7 +93,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
             name="meaning"
             value={formState.meaning}
             onChange={handleChange}
-            placeholder="meaning"
+            placeholder="意味"
             className="outline-none border-none text-base flex-1 px-3 bg-foreground/20 w-full box-border"
           />
           <div className="shrink-0 flex-1">
@@ -102,7 +102,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
                 type="submit"
                 className="bg-rose-500 font-medium hover:bg-rose-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
               >
-                Save
+                保存
               </button>
               {kanji && (
                 <button
@@ -110,7 +110,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
                   onClick={removeKanji}
                   className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
                 >
-                  Delete
+                  削除
                 </button>
               )}
             </div>

@@ -1,0 +1,102 @@
+"use server";
+
+import { db } from "@/db";
+import { vocabularies } from "@/db/schema";
+import { actionClient } from "@/lib/safe-action";
+import { updateTag } from "next/cache";
+import z from "zod";
+import { zfd } from "zod-form-data";
+
+const saveGoiSchema = zfd.formData({
+  kanji: zfd.text(z.string().min(1)),
+  meaning: zfd.text(z.string().min(1)),
+  furigana: zfd.text(z.string().min(1)),
+});
+
+export const saveGoiAction = actionClient
+  .inputSchema(saveGoiSchema)
+  .action(
+    async ({
+      parsedInput: { furigana, kanji, meaning },
+    }): Promise<{ isSuccess: boolean; message: string }> => {
+      let isSuccess = false;
+      let message = "";
+      try {
+        await db
+          .insert(vocabularies)
+          .values({
+            furigana,
+            kanji,
+            meaning,
+          })
+          .onConflictDoUpdate({
+            target: vocabularies.kanji,
+            set: {
+              furigana,
+              kanji,
+              meaning,
+            },
+          });
+        isSuccess = true;
+        message = "Added";
+      } catch (error) {
+        console.error(error);
+        throw new Error("fail to store to db");
+      }
+
+      updateTag("vocabs");
+      updateTag("vocab-exercise");
+
+      return {
+        isSuccess,
+        message,
+      };
+    },
+  );
+
+export async function saveGoiActionV(_: unknown, formData: FormData) {
+  const { success, data } = saveGoiSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!success) {
+    return {
+      isSuccess: false,
+      message: "Incomple inputs",
+    };
+  }
+
+  const { furigana, kanji, meaning } = data;
+  let isSuccess = false;
+  let message = "";
+
+  try {
+    await db
+      .insert(vocabularies)
+      .values({
+        furigana,
+        kanji,
+        meaning,
+      })
+      .onConflictDoUpdate({
+        target: vocabularies.kanji,
+        set: {
+          furigana,
+          kanji,
+          meaning,
+        },
+      });
+    isSuccess = true;
+    message = "Added";
+  } catch (error) {
+    console.error(error);
+    message = "fail to store to db";
+  }
+
+  updateTag("vocabs");
+
+  return {
+    isSuccess,
+    message,
+  };
+}

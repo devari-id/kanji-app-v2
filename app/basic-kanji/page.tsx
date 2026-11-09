@@ -1,8 +1,9 @@
-import FormAddKanji from "@/components/forms/form-add-kanji";
+import FormAddKanji from "./form-add-kanji";
 import { db } from "@/db";
 import { cacheTag } from "next/cache";
 import BasicKanjiItem from "./basic-kanji-item";
 import { Suspense } from "react";
+import { SearchParams } from "@/types";
 
 const getBasicKanji = async () => {
   "use cache";
@@ -13,8 +14,6 @@ const getBasicKanji = async () => {
   });
   return result;
 };
-
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 const getBasicKanjiById = async (id: string) => {
   "use cache";
@@ -39,7 +38,7 @@ export default async function KanjiPage({
     <div className="my-4">
       <div className="w-full">
         <Suspense fallback={<p>loading...</p>}>
-          <SuspensedForm sp={searchParams} />
+          <SuspenseForm sp={searchParams} />
         </Suspense>
       </div>
       <div className="grid grid-cols-10 my-8 gap-y-4">
@@ -51,11 +50,9 @@ export default async function KanjiPage({
   );
 }
 
-async function SuspensedForm({ sp }: { sp: SearchParams }) {
+async function SuspenseForm({ sp }: { sp: SearchParams }) {
   const { id } = await sp;
-
   const kanji = id ? await getBasicKanjiById(id as string) : undefined;
-
   return (
     <FormAddKanji key={typeof id === "string" ? id : undefined} kanji={kanji} />
   );

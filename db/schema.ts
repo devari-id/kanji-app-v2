@@ -3,8 +3,8 @@ import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 export const vocabularies = pgTable("vocabularies", {
   id: uuid("id").primaryKey().defaultRandom(),
   kanji: text("kanji").notNull().unique(),
-  meaning: text("meaning"),
-  furigana: text("furigana"),
+  meaning: text("meaning").notNull(),
+  furigana: text("furigana").notNull(),
   reviewCount: integer("review_count").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

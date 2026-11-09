@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { kanjis } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { updateTag } from "next/cache";
-import { redirect } from "next/navigation";
 import z from "zod";
 
 const saveNewBasicKanjiSchema = z.object({

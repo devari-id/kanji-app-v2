@@ -7,15 +7,15 @@ import { Fragment } from "react/jsx-runtime";
 
 const links = [
   {
-    name: "Vocabularies",
+    name: "単語",
     to: "/",
   },
   {
-    name: "Exercise",
+    name: "練習",
     to: "/vocab-exercise",
   },
   {
-    name: "Basic Kanji",
+    name: "基本漢字",
     to: "/basic-kanji",
   },
 ];
@@ -31,10 +31,17 @@ export default function Navbar() {
             <li
               className={cn(
                 pathname === link.to ? "font-medium text-rose-500" : "",
-                "hover:underline hover:underline-offset-4",
               )}
             >
-              <Link href={link.to}>{link.name}</Link>
+              <Link
+                className={cn(
+                  "text-3xl font-mincho ",
+                  pathname === link.to ? "underline underline-offset-8" : "",
+                )}
+                href={link.to}
+              >
+                {link.name}
+              </Link>
             </li>
           </Fragment>
         ))}

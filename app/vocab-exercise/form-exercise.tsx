@@ -1,9 +1,10 @@
 "use client";
 
-import { SubmitEvent, useId, useState } from "react";
+import { SubmitEvent, useEffect, useId, useRef, useState } from "react";
 import TotalVocabInput from "./total-vocab";
 import useMeasure from "react-use-measure";
 import { Vocabulary } from "@/db/schema";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   vocabs: Vocabulary[];
@@ -11,6 +12,14 @@ type Props = {
 
 export default function FormExercise({ vocabs }: Props) {
   const [total, setTotal] = useState(5);
+
+  const pathname = usePathname();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    formRef.current?.reset();
+  }, [pathname]);
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,21 +48,25 @@ export default function FormExercise({ vocabs }: Props) {
 
   return (
     <div className="flex flex-col gap-y-8 my-8">
-      <TotalVocabInput setTotal={setTotal} total={total} />
-      <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+      <div className="flex items-center justify-center gap-x-2">
+        <TotalVocabInput setTotal={setTotal} total={total} />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-rose-500 hover:bg-rose-700 duration-200 ease-linear transition-all rounded-xl font-medium"
+        >
+          Submit
+        </button>
+      </div>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-y-4"
+      >
         {Array(total)
           .fill("")
           .map((_, i) => (
             <ExerciseInput index={i} word={vocabs[i]} key={i} />
           ))}
-        <div className="flex items-center justify-center">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-rose-500 hover:bg-rose-700 duration-200 ease-linear transition-all rounded-xl font-medium"
-          >
-            Submit
-          </button>
-        </div>
       </form>
     </div>
   );
@@ -69,7 +82,7 @@ function ExerciseInput({ word, index }: { word: Vocabulary; index: number }) {
       className="flex h-20 gap-x-2 border items-center rounded-xl overflow-hidden"
     >
       <div className="bg-foreground flex items-center shrink-0 text-background h-full w-max px-4">
-        <label className="text-4xl" htmlFor={id}>
+        <label className="text-4xl font-mincho" htmlFor={id}>
           {word.kanji}
         </label>
       </div>

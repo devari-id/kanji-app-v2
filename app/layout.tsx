@@ -1,15 +1,19 @@
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Space_Grotesk, Shippori_Mincho } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const mincho = Shippori_Mincho({
+  subsets: ["latin"],
+  variable: "--font-mincho",
+  weight: "500",
+});
 
 const sans = Space_Grotesk({
-  variable: "--font-app-sans",
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -28,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "antialiased",
         sans.variable,
         "font-sans",
-        inter.variable,
+        mincho.variable,
       )}
     >
       <body className="min-h-full flex flex-col">
@@ -38,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="container max-w-3xl mx-auto border border-foreground/10 min-h-screen p-4">
+          <div className="container mx-auto border border-foreground/10 min-h-screen p-4">
             <Navbar />
             {children}
           </div>
