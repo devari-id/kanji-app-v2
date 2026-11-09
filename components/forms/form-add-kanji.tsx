@@ -1,21 +1,13 @@
 "use client";
 
 import { deleteBasicKanji, saveBasicKanji } from "@/actions/kanji-actions";
-import {
-  ChangeEvent,
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { initialState } from "./init-state";
 import { KanjiItem } from "@/db/schema";
 import { useRouter } from "next/navigation";
 
 export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
-  const formRef = useRef<HTMLFormElement>(null);
-
   const router = useRouter();
 
   const [state, action, pending] = useActionState(saveBasicKanji, initialState);
@@ -42,6 +34,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
     if (!state.isSuccess && state.message !== "") {
       toast.error(state.message);
     }
+    // eslint-disable-next-line
   }, [state]);
 
   const removeKanji = async () => {

@@ -1,27 +1,25 @@
-import { Field } from "@/components/ui/field";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from "@/components/ui/input-group";
-import { useState } from "react";
+"use client";
 
-export default function TotalVocabInput() {
-  const [value, setValue] = useState(5);
+import { Dispatch, SetStateAction } from "react";
+
+type Props = {
+  total: number;
+  setTotal: Dispatch<SetStateAction<number>>;
+};
+
+export default function TotalVocabInput({ setTotal, total }: Props) {
   return (
-    <Field>
-      <InputGroup>
-        <InputGroupInput
-          value={value}
+    <div className="flex justify-center">
+      <div className="border border-foreground/20 w-max pr-4 flex items-center gap-x-4 rounded-xl overflow-hidden">
+        <label className="font-medium h-full p-4">Total Vocabs : </label>
+        <input
+          value={total}
+          max={10}
+          onChange={(e) => setTotal(Number(e.target.value))}
           type="number"
-          id="input-group-url"
-          placeholder="example.com"
+          className="text-xl outline-none border-none w-30"
         />
-        <InputGroupAddon>
-          <InputGroupText>Total Vocab</InputGroupText>
-        </InputGroupAddon>
-      </InputGroup>
-    </Field>
+      </div>
+    </div>
   );
 }
