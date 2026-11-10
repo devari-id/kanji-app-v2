@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
-import { saveGoiAction } from "./action";
+import { removeGoiAction, saveGoiAction } from "./actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
@@ -66,11 +66,19 @@ export default function FormGoi({ word }: Props) {
     execute(new FormData(e.currentTarget));
   };
 
+  const { execute: executeRemoveWord, isPending: isPendingRemoveWord } =
+    useAction(removeGoiAction, {
+      onSuccess: ({ data: { message } }) => {
+        router.replace("/");
+        toast.success(message);
+      },
+    });
+
   return (
     <fieldset disabled={isPending}>
       <form
         onSubmit={handleSubmit}
-        className="flex w-full h-30 gap-1 rounded-xl overflow-hidden"
+        className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
       >
         <div className="h-full flex-1">
           <input
@@ -104,22 +112,23 @@ export default function FormGoi({ word }: Props) {
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
         </div>
-        <div className="flex items-center h-full gap-x-1">
+        <div className="flex flex-col items-center h-full gap-x-1">
           <button
             type="submit"
             className="bg-rose-500 font-medium hover:bg-rose-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-15"
           >
             保存
           </button>
-          {/*{kanji && (
-                <button
-                  type="button"
-                  onClick={removeKanji}
-                  className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
-                >
-                  削除
-                </button>
-              )}*/}
+          {word && (
+            <button
+              disabled={isPendingRemoveWord}
+              type="button"
+              onClick={() => executeRemoveWord({ id: word.id })}
+              className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
+            >
+              削除
+            </button>
+          )}
         </div>
       </form>
     </fieldset>

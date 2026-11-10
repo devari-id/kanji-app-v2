@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteBasicKanji, saveBasicKanji } from "@/actions/kanji-actions";
+import { deleteBasicKanji, saveBasicKanji } from "@/app/basic-kanji/actions";
 import { ChangeEvent, useActionState, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { KanjiItem } from "@/db/schema";
@@ -17,6 +17,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
     kunyomi: kanji?.kunyomi ?? "",
     onyomi: kanji?.onyomi ?? "",
     meaning: kanji?.meaning ?? "",
+    note: kanji?.note ?? "",
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,16 +56,28 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
     <fieldset disabled={pending}>
       <form
         action={action}
-        className="flex w-full h-30 gap-1 rounded-xl overflow-hidden"
+        className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
       >
-        <div className="h-full flex-2">
+        <div className="h-full gap-x-1 flex items-center flex-2">
           <input
             type="text"
             name="kanji"
             value={formState.kanji}
             onChange={handleChange}
             placeholder="漢字"
-            className="outline-none border-none h-full text-4xl px-4 bg-foreground/20 box-border w-full"
+            className="outline-none border-none h-full text-4xl px-4 bg-foreground/20 box-border flex-1"
+          />
+          <textarea
+            placeholder="note"
+            name="note"
+            value={formState.note}
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                note: e.target.value,
+              });
+            }}
+            className="outline-none border-none h-full p-4 bg-foreground/20 box-border flex-1 resize-none"
           />
         </div>
 

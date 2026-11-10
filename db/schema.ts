@@ -17,6 +17,7 @@ export const kanjis = pgTable("kanjis", {
   id: uuid("id").primaryKey().defaultRandom(),
   kanji: text("kanji").notNull().unique(),
   kunyomi: text("kunyomi"),
+  note: text("note"),
   onyomi: text("onyomi"),
   meaning: text("meaning").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),

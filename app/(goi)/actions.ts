@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { vocabularies } from "@/db/schema";
 import { actionClient } from "@/lib/safe-action";
+import { eq } from "drizzle-orm";
 import { updateTag } from "next/cache";
 import z from "zod";
 import { zfd } from "zod-form-data";
@@ -12,6 +13,28 @@ const saveGoiSchema = zfd.formData({
   meaning: zfd.text(z.string().min(1)),
   furigana: zfd.text(z.string().min(1)),
 });
+
+export const removeGoiAction = actionClient
+  .inputSchema(
+    z.object({
+      id: z.string().min(1),
+    }),
+  )
+  .action(async ({ parsedInput: { id } }) => {
+    try {
+      await db.delete(vocabularies).where(eq(vocabularies.id, id));
+    } catch (err) {
+      console.log(err);
+      throw new Error("fail to delete");
+    }
+
+    updateTag("vocabs");
+    updateTag("vocab-exercise");
+
+    return {
+      message: "Deleted",
+    };
+  });
 
 export const saveGoiAction = actionClient
   .inputSchema(saveGoiSchema)
