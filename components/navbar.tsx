@@ -12,11 +12,11 @@ const links = [
   },
   {
     name: "練習",
-    to: "/vocab-exercise",
+    to: "/goi-exercise",
   },
   {
     name: "基本漢字",
-    to: "/basic-kanji",
+    to: "/kanjis",
   },
 ];
 

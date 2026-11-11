@@ -1,16 +1,17 @@
 "use client";
 
-import { deleteBasicKanji, saveBasicKanji } from "@/app/basic-kanji/actions";
-import { ChangeEvent, useActionState, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { saveKanjiAction, updateKanjiAction } from "@/app/kanjis/actions";
 import { KanjiItem } from "@/db/schema";
+import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { initialState } from "@/components/forms/init-state";
+import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import RemoveKanjiButton from "./remove-kanji-button";
 
 export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
   const router = useRouter();
 
-  const [state, action, pending] = useActionState(saveBasicKanji, initialState);
+  const inputKanjiRef = useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState({
     kanji: kanji?.kanji ?? "",
@@ -20,6 +21,69 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
     note: kanji?.note ?? "",
   });
 
+  const resetFormState = () => {
+    setFormState({
+      kanji: "",
+      kunyomi: "",
+      meaning: "",
+      note: "",
+      onyomi: "",
+    });
+  };
+
+  const { execute: executeSave, isPending: isPendingSave } = useAction(
+    saveKanjiAction,
+    {
+      onSuccess: ({ data: { message } }) => {
+        toast.success(message);
+        resetFormState();
+      },
+      onError: ({ error: { thrownError, validationErrors } }) => {
+        if (thrownError) {
+          toast.error(thrownError.message);
+        }
+        if (validationErrors) {
+          console.log(validationErrors);
+          toast.error("invalid input");
+        }
+      },
+      onSettled: () => {
+        setTimeout(() => {
+          inputKanjiRef.current?.focus();
+        }, 250);
+      },
+    },
+  );
+
+  const updateKanjiActionWithBind = updateKanjiAction.bind(
+    null,
+    kanji?.id ?? "",
+  );
+  const { execute: executeUpdate, isPending: isPendingUpdate } = useAction(
+    updateKanjiActionWithBind,
+    {
+      onSuccess: ({ data: { message } }) => {
+        toast.success(message);
+        resetFormState();
+        router.replace("/kanjis");
+      },
+      onError: ({ error: { thrownError, validationErrors } }) => {
+        if (thrownError) {
+          toast.error(thrownError.message);
+        }
+        if (validationErrors) {
+          console.log(validationErrors);
+          toast.error("kanji id is missing");
+        }
+      },
+      onSettled: () => {
+        setTimeout(() => {
+          inputKanjiRef.current?.focus();
+        }, 250);
+      },
+    },
+  );
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormState({
       ...formState,
@@ -27,39 +91,24 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
     });
   };
 
-  useEffect(() => {
-    if (state.isSuccess) {
-      toast.success(state.message);
-      router.push("/basic-kanji");
-    }
-    if (!state.isSuccess && state.message !== "") {
-      toast.error(state.message);
-    }
-    // eslint-disable-next-line
-  }, [state]);
-
-  const removeKanji = async () => {
-    if (!kanji) {
-      toast.error("cannot delete kanji");
-      return;
-    }
-    const { isSuccess } = await deleteBasicKanji(kanji.id);
-    if (isSuccess) {
-      toast.success("deleted");
-      router.replace("/basic-kanji");
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (kanji) {
+      executeUpdate(new FormData(e.currentTarget));
     } else {
-      toast.error("fail to delete");
+      executeSave(new FormData(e.currentTarget));
     }
   };
 
   return (
-    <fieldset disabled={pending}>
+    <fieldset disabled={isPendingSave || isPendingUpdate}>
       <form
-        action={action}
+        onSubmit={handleSubmit}
         className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
       >
         <div className="h-full gap-x-1 flex items-center flex-2">
           <input
+            ref={inputKanjiRef}
             type="text"
             name="kanji"
             value={formState.kanji}
@@ -117,15 +166,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
               >
                 保存
               </button>
-              {kanji && (
-                <button
-                  type="button"
-                  onClick={removeKanji}
-                  className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
-                >
-                  削除
-                </button>
-              )}
+              {kanji && <RemoveKanjiButton kanji={kanji} />}
             </div>
           </div>
         </div>

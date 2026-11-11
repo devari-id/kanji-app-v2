@@ -4,21 +4,21 @@ import FormGoi from "./form-goi";
 import { GoiItem } from "./goi-item";
 import { SearchParams } from "@/types";
 import { Suspense } from "react";
+import { cacheKeys } from "@/cache-key";
 
 const getAllVocabs = async () => {
   "use cache";
-  cacheTag("vocabs");
+  cacheTag(cacheKeys.goi.all);
 
   const data = await db.query.vocabularies.findMany({
     orderBy: { createdAt: "desc", reviewCount: "asc" },
   });
-
   return data;
 };
 
 const getWordById = async (id: string) => {
   "use cache";
-  cacheTag("vocabs", id);
+  cacheTag(...cacheKeys.goi.detail(id));
 
   const data = await db.query.vocabularies.findFirst({
     where: {

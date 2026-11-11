@@ -4,10 +4,11 @@ import { cacheTag } from "next/cache";
 import BasicKanjiItem from "./basic-kanji-item";
 import { Suspense } from "react";
 import { SearchParams } from "@/types";
+import { cacheKeys } from "@/cache-key";
 
 const getBasicKanji = async () => {
   "use cache";
-  cacheTag("basic-kanjis");
+  cacheTag(cacheKeys.kanji.all);
 
   const result = await db.query.kanjis.findMany({
     orderBy: { createdAt: "asc" },
@@ -17,7 +18,7 @@ const getBasicKanji = async () => {
 
 const getBasicKanjiById = async (id: string) => {
   "use cache";
-  cacheTag("basic-kanjis", id);
+  cacheTag(cacheKeys.kanji.detail(id));
 
   const result = await db.query.kanjis.findFirst({
     where: {
