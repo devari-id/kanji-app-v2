@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { vocabularies } from "@/db/schema";
+import { generateJapaneseExamples } from "@/lib/gemini-service";
 import { actionClient } from "@/lib/safe-action";
 import { eq } from "drizzle-orm";
 import { updateTag } from "next/cache";
@@ -76,3 +77,66 @@ export const saveGoiAction = actionClient
       };
     },
   );
+
+export async function saveGoiActionV(_: unknown, formData: FormData) {
+  const { success, data } = saveGoiSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (!success) {
+    return {
+      isSuccess: false,
+      message: "Incomple inputs",
+    };
+  }
+
+  const { furigana, kanji, meaning } = data;
+  let isSuccess = false;
+  let message = "";
+
+  try {
+    await db
+      .insert(vocabularies)
+      .values({
+        furigana,
+        kanji,
+        meaning,
+      })
+      .onConflictDoUpdate({
+        target: vocabularies.kanji,
+        set: {
+          furigana,
+          kanji,
+          meaning,
+        },
+      });
+    isSuccess = true;
+    message = "Added";
+  } catch (error) {
+    console.error(error);
+    message = "fail to store to db";
+  }
+
+  updateTag("vocabs");
+
+  return {
+    isSuccess,
+    message,
+  };
+}
+
+export const generateExampleAction = actionClient
+  .inputSchema(
+    z.object({
+      word: z.string().trim().min(1),
+    }),
+  )
+  .action(async ({ parsedInput: { word } }) => {
+    try {
+      const result = await generateJapaneseExamples(word);
+      return result;
+    } catch (err) {
+      console.log(err);
+      throw new Error("something went wrong. please try again.");
+    }
+  });

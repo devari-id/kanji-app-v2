@@ -24,3 +24,14 @@ export const kanjis = pgTable("kanjis", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 export type KanjiItem = typeof kanjis.$inferSelect;
+
+export const wordExamples = pgTable("wordExamples", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  japanese: text("japanese").notNull(),
+  english: text("english").notNull(),
+  indonesia: text("indonesia").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  vocabId: uuid("vocab_id")
+    .notNull()
+    .references(() => vocabularies.id, { onDelete: "cascade" }),
+});
