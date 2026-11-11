@@ -95,8 +95,8 @@ button {
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: oklch(21.891% 0.00155 16.394);
+  --foreground: oklch(89.755% 0.0001 271.152);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -135,11 +135,8 @@ button {
   body {
     @apply bg-background text-foreground;
   }
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
   html {
     @apply font-sans;
+    scrollbar-gutter: stable;
   }
 }

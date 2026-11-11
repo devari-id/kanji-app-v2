@@ -29,9 +29,10 @@ export const wordExamples = pgTable("wordExamples", {
   id: uuid("id").primaryKey().defaultRandom(),
   japanese: text("japanese").notNull(),
   english: text("english").notNull(),
-  indonesia: text("indonesia").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  romaji: text("romaji").notNull(),
+  indonesian: text("indonesia").notNull(),
   vocabId: uuid("vocab_id")
     .notNull()
     .references(() => vocabularies.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });

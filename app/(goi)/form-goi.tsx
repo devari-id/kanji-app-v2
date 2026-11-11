@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
-import { removeGoiAction, saveGoiAction } from "./actions";
+import { removeGoiAction, saveGoiAction, updateGoiAction } from "./actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
@@ -12,8 +12,6 @@ type Props = {
 };
 
 export default function FormGoi({ word }: Props) {
-  const formRef = useRef<HTMLFormElement>(null);
-
   const kanjiInputRef = useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState({
@@ -26,8 +24,6 @@ export default function FormGoi({ word }: Props) {
 
   const { execute, isPending } = useAction(saveGoiAction, {
     onSuccess: ({ data: { message } }) => {
-      formRef.current?.reset();
-
       setFormState({
         furigana: "",
         kanji: "",
@@ -47,12 +43,30 @@ export default function FormGoi({ word }: Props) {
       }
     },
     onSettled: () => {
-      // given a short delay until DOM finish re-render
       setTimeout(() => {
         kanjiInputRef.current?.focus();
       }, 150);
     },
   });
+
+  const updateGoiActionWithBind = updateGoiAction.bind(null, word?.id ?? "");
+  const { execute: executeUpdateAction, isPending: isPendingUpdate } =
+    useAction(updateGoiActionWithBind, {
+      onSuccess: ({ data: { message } }) => {
+        toast.success(message);
+      },
+      onError: ({ error: { thrownError, serverError, validationErrors } }) => {
+        if (thrownError) {
+          toast.error(thrownError.message);
+        }
+        if (serverError) {
+          toast.error("Something went wrong. Please try again");
+        }
+        if (validationErrors) {
+          toast.error("Invalid input");
+        }
+      },
+    });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormState({
@@ -63,7 +77,11 @@ export default function FormGoi({ word }: Props) {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    execute(new FormData(e.currentTarget));
+    if (word) {
+      executeUpdateAction(new FormData(e.currentTarget));
+    } else {
+      execute(new FormData(e.currentTarget));
+    }
   };
 
   const { execute: executeRemoveWord, isPending: isPendingRemoveWord } =
@@ -75,7 +93,7 @@ export default function FormGoi({ word }: Props) {
     });
 
   return (
-    <fieldset disabled={isPending}>
+    <fieldset disabled={isPending || isPendingUpdate}>
       <form
         onSubmit={handleSubmit}
         className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"

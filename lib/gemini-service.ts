@@ -12,11 +12,6 @@ const japaneseSentenceSchema: Schema = {
       description:
         "Kalimat lengkap dalam bahasa Jepang (menggunakan Kanji dan Kana yang natural sesuai level JLPT N3).",
     },
-    furigana: {
-      type: Type.STRING,
-      description:
-        "Furigana untuk seluruh kalimat dalam format HTML ruby tag atau tanda kurung, contoh: 勉強(べんきょう) atau <ruby>勉強<rt>べんきょう</rt></ruby>.",
-    },
     romaji: {
       type: Type.STRING,
       description: "Transliterasi Romaji dari kalimat bahasa Jepang tersebut.",
@@ -30,7 +25,7 @@ const japaneseSentenceSchema: Schema = {
       description: "Terjemahan kalimat ke dalam bahasa Inggris yang natural.",
     },
   },
-  required: ["japanese", "furigana", "romaji", "indonesian", "english"],
+  required: ["japanese", "romaji", "indonesian", "english"],
 };
 
 const responseSchema: Schema = {
@@ -41,7 +36,6 @@ const responseSchema: Schema = {
 
 export interface JapaneseExample {
   japanese: string;
-  furigana: string;
   romaji: string;
   indonesian: string;
   english: string;

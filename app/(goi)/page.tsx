@@ -1,33 +1,10 @@
-import { db } from "@/db";
-import { cacheTag } from "next/cache";
-import FormGoi from "./form-goi";
-import { GoiItem } from "./goi-item";
 import { SearchParams } from "@/types";
 import { Suspense } from "react";
-import { cacheKeys } from "@/cache-key";
+import ExampleAccordion from "./example-accordion";
+import FormGoi from "./form-goi";
 import GenerateExampleWithGeminiButton from "./generate-example-button";
-
-const getAllVocabs = async () => {
-  "use cache";
-  cacheTag(cacheKeys.goi.all);
-
-  const data = await db.query.vocabularies.findMany({
-    orderBy: { createdAt: "desc", reviewCount: "asc" },
-  });
-  return data;
-};
-
-const getWordById = async (id: string) => {
-  "use cache";
-  cacheTag(...cacheKeys.goi.detail(id));
-
-  const data = await db.query.vocabularies.findFirst({
-    where: {
-      id,
-    },
-  });
-  return data;
-};
+import { GoiItem } from "./goi-item";
+import { getAllVocabs, getWordById, getWordExamples } from "./queries";
 
 export default async function HomePage({
   searchParams,
@@ -35,11 +12,11 @@ export default async function HomePage({
   searchParams: SearchParams;
 }) {
   const vocabs = await getAllVocabs();
-
   return (
     <div className="my-4 space-y-8">
       <Suspense fallback={<p>loading...</p>}>
         <SuspenseForm sp={searchParams} />
+        <SuspenseExample sp={searchParams} />
         <SuspenseGenerateButton sp={searchParams} />
       </Suspense>
       <div className="flex flex-wrap gap-4 border-foreground/20">
@@ -47,6 +24,30 @@ export default async function HomePage({
           <GoiItem item={e} key={i} />
         ))}
       </div>
+    </div>
+  );
+}
+
+async function SuspenseExample({ sp }: { sp: SearchParams }) {
+  const { id } = await sp;
+  const word = id ? await getWordById(id as string) : undefined;
+  const examples = id ? await getWordExamples(id as string) : undefined;
+
+  if (!id) {
+    return null;
+  }
+  if (!word) {
+    return <p>word not found</p>;
+  }
+  if (!examples) return null;
+
+  return (
+    <div className="flex justify-center">
+      <ExampleAccordion
+        key={typeof id === "string" ? id : undefined}
+        examples={examples}
+        vocabId={id as string}
+      />
     </div>
   );
 }

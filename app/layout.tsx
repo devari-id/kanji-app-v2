@@ -1,15 +1,15 @@
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
-import { Space_Grotesk, Shippori_Mincho } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Sans_JP } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const mincho = Shippori_Mincho({
+const mincho = IBM_Plex_Sans_JP({
   subsets: ["latin"],
   variable: "--font-mincho",
-  weight: "500",
+  weight: ["100", "400"],
 });
 
 const sans = Space_Grotesk({

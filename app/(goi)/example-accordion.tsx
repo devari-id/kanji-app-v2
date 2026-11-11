@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
@@ -6,54 +8,96 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { JapaneseExample } from "@/lib/gemini-service";
+import { saveExampleAction } from "./actions";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
-const items = [
-  {
-    value: "item-1",
-    trigger: "How do I reset my password?",
-    content:
-      "Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your password. The link will expire in 24 hours.",
-  },
-  {
-    value: "item-2",
-    trigger: "Can I change my subscription plan?",
-    content:
-      "Yes, you can upgrade or downgrade your plan at any time from your account settings. Changes will be reflected in your next billing cycle.",
-  },
-  {
-    value: "item-3",
-    trigger: "What payment methods do you accept?",
-    content:
-      "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our payment partners.",
-  },
-];
+type SaveExample = {
+  english: string;
+  indonesian: string;
+  japanese: string;
+  romaji: string;
+};
 
 export default function ExampleAccordion({
   examples,
+  vocabId,
+  isEnabledSavedbutton = false,
 }: {
   examples: JapaneseExample[];
+  vocabId: string;
+  isEnabledSavedbutton?: boolean;
 }) {
   const updatedExamples = examples.map((e, i) => ({
     ...e,
     value: `item-${i}`,
   }));
+
   return (
     <Accordion multiple className="max-w-max text-xl">
-      {updatedExamples.map((item) => (
-        <AccordionItem key={item.value} value={item.value}>
-          <AccordionTrigger className="text-xl">
-            {item.indonesian}
-          </AccordionTrigger>
-          <AccordionContent className="text-xl">
-            <div>{item.japanese}</div>
-            <div>{item.english}</div>
-            <div>{item.romaji}</div>
-            <div className="flex items-center gap-x-4 justify-end">
-              <Button className="font-bold">Save</Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      ))}
+      {updatedExamples.map(
+        ({ english, indonesian, japanese, romaji, value }) => (
+          <AccordionItem key={value} value={value}>
+            <AccordionTrigger className="text-xl">
+              {indonesian}
+            </AccordionTrigger>
+            <AccordionContent className="text-xl">
+              <div className="text-2xl font-mincho">{japanese}</div>
+              <div>{english}</div>
+              <div>{romaji}</div>
+              {isEnabledSavedbutton && (
+                <div className="flex items-center gap-x-4 justify-end">
+                  <SaveExampleButton
+                    data={{ english, indonesian, japanese, romaji }}
+                    vocabId={vocabId}
+                  />
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        ),
+      )}
     </Accordion>
+  );
+}
+
+function SaveExampleButton({
+  data: { english, indonesian, japanese, romaji },
+  vocabId,
+}: {
+  data: SaveExample;
+  vocabId: string;
+}) {
+  const [loading, setLoading] = useState(false);
+
+  const [isDisabed, setDisabled] = useState(false);
+
+  const saveExample = async () => {
+    setLoading(true);
+    const { data, serverError } = await saveExampleAction({
+      english,
+      indonesian,
+      japanese,
+      romaji,
+      vocabId,
+    });
+    if (data) {
+      toast.success(data.message);
+      setDisabled(true);
+    }
+    if (serverError) {
+      toast.error(serverError);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <Button
+      disabled={isDisabed || loading}
+      onClick={saveExample}
+      className="font-bold"
+    >
+      Save
+    </Button>
   );
 }
