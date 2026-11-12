@@ -2,6 +2,18 @@ import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
 import { cacheTag } from "next/cache";
 
+export const findVocabsByKanjiComponent = async (kanji: string) => {
+  "use cache";
+  cacheTag(cacheKeys.goi.search(kanji));
+
+  const result = await db.query.vocabularies.findMany({
+    where: {
+      kanji: { ilike: `%${kanji}%` },
+    },
+  });
+  return result;
+};
+
 export const getAllVocabs = async () => {
   "use cache";
   cacheTag(cacheKeys.goi.all);

@@ -25,6 +25,7 @@ export default function GenerateExampleWithGeminiButton({
         word: word.kanji,
       });
       if (serverError) {
+        console.log({ serverError });
         toast.error(serverError);
       }
       if (data) {

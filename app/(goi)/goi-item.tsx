@@ -14,7 +14,7 @@ export const GoiItem: React.FC<Props> = ({ item }) => {
   return (
     <div
       onClick={() => router.push(`/?id=${item.id}`)}
-      className="text-4xl cursor-pointer font-mincho p-4 hover:text-rose-500"
+      className="text-4xl font-mincho p-4"
     >
       {item.kanji}
     </div>

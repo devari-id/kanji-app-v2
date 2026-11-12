@@ -6,6 +6,7 @@ export const cacheKeys = {
   goi: {
     all: goi,
     detail: (id: string) => `${goi}-${id}`,
+    search: (kanji: string) => `vocabs-${kanji}`,
     exercise: goiExercise,
     example: (id: string) => `word-example-of-${id}`,
   },

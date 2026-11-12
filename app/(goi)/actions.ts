@@ -6,6 +6,7 @@ import { vocabularies, wordExamples } from "@/db/schema";
 import { generateJapaneseExamples } from "@/lib/gemini-service";
 import { actionClient } from "@/lib/safe-action";
 import { messages } from "@/toast-messages";
+import { ApiError } from "@google/genai";
 import { eq } from "drizzle-orm";
 import { revalidateTag, updateTag } from "next/cache";
 import z from "zod";
@@ -111,6 +112,11 @@ export const generateExampleAction = actionClient
       return result;
     } catch (err) {
       console.log(err);
+      if (err instanceof ApiError) {
+        if (err.status === 429) {
+          throw new Error("Quota exceeds");
+        }
+      }
       throw new Error("something went wrong. please try again.");
     }
   });

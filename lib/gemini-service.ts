@@ -2,6 +2,7 @@ import { GoogleGenAI, Type, Schema } from "@google/genai";
 
 // Inisialisasi klien Gemini menggunakan GEMINI_API_KEY dari environment variable
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai2 = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY_2 });
 
 // Definisikan struktur skema output JSON yang diinginkan menggunakan Structured Outputs
 const japaneseSentenceSchema: Schema = {
@@ -53,12 +54,12 @@ export async function generateJapaneseExamples(
   count: number = 3,
 ): Promise<JapaneseExample[]> {
   try {
-    const prompt = `Buatlah ${count} contoh kalimat bahasa Jepang yang menggunakan kata atau pola "${keyword}". 
-    Target pembelajar adalah level ${level}. 
+    const prompt = `Buatlah ${count} contoh kalimat bahasa Jepang yang menggunakan kata atau pola "${keyword}".
+    Target pembelajar adalah level ${level}.
     Pastikan tata bahasa, kosakata, dan tingkat kesulitannya sesuai dengan standar JLPT ${level}.`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash", // Menggunakan model cepat dan efisien
+    const response = await ai2.models.generateContent({
+      model: "gemini-3.6-flash", // Menggunakan model cepat dan efisien
       contents: prompt,
       config: {
         // Menggunakan responseMimeType dan responseSchema untuk menjamin output berupa JSON murni yang tervalidasi
