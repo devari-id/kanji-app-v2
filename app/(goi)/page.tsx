@@ -10,7 +10,7 @@ import {
   getWordById,
   getWordExamples,
 } from "./queries";
-import SearchGoiForm from "./search-goi-form";
+import TabExampleInput from "./tab-example-input";
 
 export default async function HomePage({
   searchParams,
@@ -18,8 +18,7 @@ export default async function HomePage({
   searchParams: SearchParams;
 }) {
   return (
-    <div className="my-4 space-y-8">
-      <SearchGoiForm />
+    <div className="space-y-4">
       {/* Setiap runtime API (searchParams) dibaca aman di dalam Suspense */}
       <Suspense fallback={<p>Loading form...</p>}>
         <SuspenseForm sp={searchParams} />
@@ -29,9 +28,13 @@ export default async function HomePage({
         <SuspenseExample sp={searchParams} />
       </Suspense>
 
-      <Suspense fallback={<p>Loading button...</p>}>
+      {/*<Suspense fallback={<p>Loading button...</p>}>
         <SuspenseGenerateExampleButton sp={searchParams} />
-      </Suspense>
+      </Suspense>*/}
+
+      <div className="w-full">
+        <TabExampleInput />
+      </div>
 
       <Suspense>
         <SuspenseVocabs sp={searchParams} />
@@ -42,7 +45,6 @@ export default async function HomePage({
 
 async function SuspenseVocabs({ sp }: { sp: SearchParams }) {
   const { query } = await sp;
-
   const isNoFilter = !query || typeof query !== "string";
 
   const vocabs = isNoFilter
@@ -50,7 +52,7 @@ async function SuspenseVocabs({ sp }: { sp: SearchParams }) {
     : await findVocabsByKanjiComponent(query);
 
   return (
-    <div className="flex flex-wrap gap-4 border-foreground/20">
+    <div className="flex flex-wrap gap-4 border-foreground/20 my-8">
       {vocabs.map((e, i) => (
         <GoiItem item={e} key={e.id ?? i} />
       ))}

@@ -8,7 +8,9 @@ export default function BasicKanjiItem({ kanji }: { kanji: KanjiItem }) {
   const pathname = usePathname();
   return (
     <div
-      onClick={() => router.push(`${pathname}?id=${kanji.id}`)}
+      onClick={() =>
+        router.push(`${pathname}?id=${kanji.id}`, { scroll: false })
+      }
       className="text-4xl cursor-pointer flex hover:text-rose-400 items-center justify-center group relative"
     >
       {kanji.kanji}

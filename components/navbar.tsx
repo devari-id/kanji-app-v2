@@ -1,5 +1,6 @@
 "use client";
 
+import SearchGoiForm from "@/app/(goi)/search-goi-form";
 import { cn } from "@/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,8 +25,8 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className=" p-4 rounded-xl border border-foreground/20">
-      <ul className="flex items-center gap-x-8">
+    <nav className="flex items-center px-4 py-2 rounded-xl border border-foreground/20">
+      <ul className="flex items-center gap-x-8 flex-1">
         {links.map((link, i) => (
           <Fragment key={i}>
             <li
@@ -46,6 +47,7 @@ export default function Navbar() {
           </Fragment>
         ))}
       </ul>
+      <SearchGoiForm />
     </nav>
   );
 }

@@ -1,32 +1,8 @@
-import FormAddKanji from "./form-add-kanji";
-import { db } from "@/db";
-import { cacheTag } from "next/cache";
-import BasicKanjiItem from "./basic-kanji-item";
-import { Suspense } from "react";
 import { SearchParams } from "@/types";
-import { cacheKeys } from "@/cache-key";
-
-const getBasicKanji = async () => {
-  "use cache";
-  cacheTag(cacheKeys.kanji.all);
-
-  const result = await db.query.kanjis.findMany({
-    orderBy: { createdAt: "asc" },
-  });
-  return result;
-};
-
-const getBasicKanjiById = async (id: string) => {
-  "use cache";
-  cacheTag(cacheKeys.kanji.detail(id));
-
-  const result = await db.query.kanjis.findFirst({
-    where: {
-      id,
-    },
-  });
-  return result;
-};
+import { Suspense } from "react";
+import BasicKanjiItem from "./basic-kanji-item";
+import FormAddKanji from "./form-add-kanji";
+import { getBasicKanji, getBasicKanjiById } from "./queries";
 
 export default async function KanjiPage({
   searchParams,
@@ -37,7 +13,7 @@ export default async function KanjiPage({
 
   return (
     <div className="my-4">
-      <div className="w-full">
+      <div className="sticky top-0 z-10 w-full bg-background py-4">
         <Suspense fallback={<p>loading...</p>}>
           <SuspenseForm sp={searchParams} />
         </Suspense>

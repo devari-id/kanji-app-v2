@@ -1,11 +1,16 @@
 "use client";
 import { Search } from "lucide-react";
 import Form from "next/form";
+import { usePathname } from "next/navigation";
 
 export default function SearchGoiForm() {
+  const pathname = usePathname();
   return (
     <div className="max-w-lg border overflow-hidden mx-auto rounded-xl">
-      <Form action="" className="flex items-center relative p-2 bg-input">
+      <Form
+        action={pathname}
+        className="flex items-center relative p-2 bg-input"
+      >
         <button
           className="bg-rose-500 flex items-center justify-center aspect-square size-12 rounded-xl"
           type="submit"
