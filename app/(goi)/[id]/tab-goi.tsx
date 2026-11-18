@@ -2,12 +2,13 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Vocabulary } from "@/db/schema";
-import { Fragment } from "react/jsx-runtime";
-import GenerateExampleWithGeminiButton from "../generate-example-button";
-import ExampleAccordion from "../example-accordion";
 import { JapaneseExample } from "@/lib/gemini-service";
-import FormExample from "./form-example";
+import { OctagonAlert } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Fragment } from "react/jsx-runtime";
+import ExampleAccordion from "../example-accordion";
+import GenerateExampleWithGeminiButton from "../generate-example-button";
+import FormExample from "./form-example";
 
 type Props = {
   word: Vocabulary;
@@ -19,7 +20,15 @@ export default function TabGoi({ word, examples }: Props) {
     {
       value: "",
       label: "Examples",
-      content: <ExampleAccordion examples={examples} vocabId={word.id} />,
+      content:
+        examples.length === 0 ? (
+          <div className="p-4 text-xl text-muted-foreground font-medium flex items-center gap-x-2">
+            <p className="">例文はまだありません</p>
+            <OctagonAlert />
+          </div>
+        ) : (
+          <ExampleAccordion examples={examples} vocabId={word.id} />
+        ),
     },
     {
       value: "create-example-manually",

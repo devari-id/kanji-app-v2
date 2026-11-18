@@ -47,7 +47,11 @@ export default function GenerateExampleWithGeminiButton({
         onClick={generateExamples}
         className={cn(
           "bg-blue-700 hover:bg-blue-800 font-medium flex items-center disabled:bg-blue-800 rounded-xl px-4 py-2",
-          loading ? "cursor-wait" : "",
+          loading
+            ? "cursor-progress"
+            : isDisabled
+              ? "cursor-default"
+              : "cursor-pointer",
         )}
       >
         <div className="flex flex-col">
