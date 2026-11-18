@@ -41,7 +41,7 @@ export default function GenerateExampleWithGeminiButton({
     }
   };
   return (
-    <div className="flex justify-center items-center flex-col gap-y-4 w-max mx-auto p-4">
+    <div className="p-4">
       <button
         disabled={loading || isDisabled}
         onClick={generateExamples}

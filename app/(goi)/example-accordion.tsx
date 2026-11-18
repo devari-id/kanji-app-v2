@@ -34,17 +34,18 @@ export default function ExampleAccordion({
   }));
 
   return (
-    <Accordion multiple className="max-w-max text-xl">
+    <Accordion multiple className="w-full text-xl">
       {updatedExamples.map(
-        ({ english, indonesian, japanese, romaji, value }) => (
+        ({ english, indonesian, japanese, romaji, value }, i) => (
           <AccordionItem key={value} value={value}>
-            <AccordionTrigger className="text-xl">
+            <AccordionTrigger className="text-base">
+              <span className="pr-4">{i + 1}.</span>
               {indonesian}
             </AccordionTrigger>
-            <AccordionContent className="text-xl">
-              <div className="text-2xl font-mincho">{japanese}</div>
-              <div>{english}</div>
-              <div>{romaji}</div>
+            <AccordionContent className="ml-4">
+              <div className="text-3xl font-mincho">{japanese}</div>
+              <div className="text-muted-foreground">{english}</div>
+              <div className="text-muted-foreground">{romaji}</div>
               {isEnabledSavedbutton && (
                 <div className="flex items-center gap-x-4 justify-end">
                   <SaveExampleButton

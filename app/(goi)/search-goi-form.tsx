@@ -9,7 +9,7 @@ export default function SearchGoiForm() {
     <div className="max-w-lg border overflow-hidden mx-auto rounded-xl">
       <Form
         action={pathname}
-        className="flex items-center relative p-2 bg-input"
+        className="flex items-center relative bg-input p-1"
       >
         <button
           className="bg-rose-500 flex items-center justify-center aspect-square size-12 rounded-xl"

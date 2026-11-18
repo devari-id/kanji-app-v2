@@ -58,8 +58,8 @@ export async function generateJapaneseExamples(
     Target pembelajar adalah level ${level}.
     Pastikan tata bahasa, kosakata, dan tingkat kesulitannya sesuai dengan standar JLPT ${level}.`;
 
-    const response = await ai2.models.generateContent({
-      model: "gemini-3.6-flash", // Menggunakan model cepat dan efisien
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash", // Menggunakan model cepat dan efisien
       contents: prompt,
       config: {
         // Menggunakan responseMimeType dan responseSchema untuk menjamin output berupa JSON murni yang tervalidasi

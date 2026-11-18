@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Suspense } from "react";
+import NextTopLoader from "nextjs-toploader";
 
 const mincho = IBM_Plex_Sans_JP({
   subsets: ["latin"],
@@ -27,15 +29,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(
-        "h-full",
-        "antialiased",
-        sans.variable,
-        "font-sans",
-        mincho.variable,
-      )}
+      className={cn("h-full", "antialiased", sans.variable, mincho.variable)}
     >
       <body className="min-h-full flex flex-col">
+        <NextTopLoader />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -43,7 +40,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           disableTransitionOnChange
         >
           <div className="container mx-auto border border-foreground/10 min-h-screen p-4">
-            <Navbar />
+            <Suspense>
+              <Navbar />
+            </Suspense>
             {children}
           </div>
           <Toaster position="bottom-center" />

@@ -1,7 +1,7 @@
 "use client";
 
 import { Vocabulary } from "@/db/schema";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import React from "react";
 
 interface Props {
@@ -13,8 +13,8 @@ export const GoiItem: React.FC<Props> = ({ item }) => {
 
   return (
     <div
-      onClick={() => router.push(`/?id=${item.id}`)}
-      className="text-4xl font-mincho p-4"
+      onClick={() => router.push(`/${item.id}`)}
+      className="text-4xl font-mincho p-4 hover:text-red-500 cursor-pointer"
     >
       {item.kanji}
     </div>
