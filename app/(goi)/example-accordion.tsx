@@ -38,7 +38,7 @@ export default function ExampleAccordion({
       {updatedExamples.map(
         ({ english, indonesian, japanese, romaji, value }, i) => (
           <AccordionItem key={value} value={value}>
-            <AccordionTrigger className="text-base">
+            <AccordionTrigger className="text-base select-text">
               <span className="pr-4">{i + 1}.</span>
               {indonesian}
             </AccordionTrigger>
