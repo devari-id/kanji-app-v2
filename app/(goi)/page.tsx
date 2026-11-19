@@ -16,7 +16,7 @@ export default async function HomePage({
   return (
     <div className="space-y-4 my-4">
       <div className="sticky top-0 z-10 w-full space-y-4 bg-background py-4">
-        <Suspense fallback={<p>Loading form...</p>}>
+        <Suspense>
           <SuspenseForm sp={searchParams} />
         </Suspense>
       </div>

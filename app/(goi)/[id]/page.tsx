@@ -13,10 +13,10 @@ export default async function GoiDetailPage({
 }) {
   return (
     <div className="sticky space-y-4 top-0 z-10 w-full bg-background py-4">
-      <Suspense fallback={<p>loading...</p>}>
+      <Suspense>
         <SusFormEdit params={params} />
       </Suspense>
-      <Suspense fallback={<p>loading...</p>}>
+      <Suspense>
         <SusTabGoiExample params={params} />
       </Suspense>
     </div>
