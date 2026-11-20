@@ -1,11 +1,11 @@
 "use client";
 
-import { Vocabulary } from "@/db/schema";
+import { Goi } from "@/db/schema";
 import { useRouter } from "nextjs-toploader/app";
 import React from "react";
 
 interface Props {
-  item: Vocabulary;
+  item: Goi;
 }
 
 export const GoiItem: React.FC<Props> = ({ item }) => {

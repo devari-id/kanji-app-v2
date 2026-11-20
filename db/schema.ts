@@ -1,6 +1,6 @@
 import { integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const vocabularies = pgTable("vocabularies", {
+export const goiTable = pgTable("goi_table", {
   id: uuid("id").primaryKey().defaultRandom(),
   kanji: text("kanji").notNull().unique(),
   meaning: text("meaning").notNull(),
@@ -10,10 +10,10 @@ export const vocabularies = pgTable("vocabularies", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export type Vocabulary = typeof vocabularies.$inferSelect;
-export type NewVocabulary = typeof vocabularies.$inferInsert;
+export type Goi = typeof goiTable.$inferSelect;
+export type NewGoi = typeof goiTable.$inferInsert;
 
-export const kanjis = pgTable("kanjis", {
+export const kanjiTable = pgTable("kanji_table", {
   id: uuid("id").primaryKey().defaultRandom(),
   kanji: text("kanji").notNull().unique(),
   kunyomi: text("kunyomi"),
@@ -23,16 +23,16 @@ export const kanjis = pgTable("kanjis", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
-export type KanjiItem = typeof kanjis.$inferSelect;
+export type KanjiItem = typeof kanjiTable.$inferSelect;
 
-export const wordExamples = pgTable("wordExamples", {
+export const reibunTable = pgTable("reibun_table", {
   id: uuid("id").primaryKey().defaultRandom(),
   japanese: text("japanese").notNull(),
   english: text("english").notNull(),
   romaji: text("romaji").notNull(),
   indonesian: text("indonesia").notNull(),
-  vocabId: uuid("vocab_id")
+  goiId: uuid("goi_id")
     .notNull()
-    .references(() => vocabularies.id, { onDelete: "cascade" }),
+    .references(() => goiTable.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

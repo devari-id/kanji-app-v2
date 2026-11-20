@@ -2,7 +2,7 @@
 
 import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
-import { vocabularies, wordExamples } from "@/db/schema";
+import { goiTable, reibunTable } from "@/db/schema";
 import { generateJapaneseExamples } from "@/lib/gemini-service";
 import { actionClient } from "@/lib/safe-action";
 import { messages } from "@/toast-messages";
@@ -26,7 +26,7 @@ export const removeGoiAction = actionClient
   )
   .action(async ({ parsedInput: { id } }) => {
     try {
-      await db.delete(vocabularies).where(eq(vocabularies.id, id));
+      await db.delete(goiTable).where(eq(goiTable.id, id));
     } catch (err) {
       console.log(err);
       throw new Error("fail to delete");
@@ -45,14 +45,14 @@ export const saveGoiAction = actionClient
   .action(async ({ parsedInput: { furigana, kanji, meaning } }) => {
     try {
       await db
-        .insert(vocabularies)
+        .insert(goiTable)
         .values({
           furigana,
           kanji,
           meaning,
         })
         .onConflictDoUpdate({
-          target: vocabularies.kanji,
+          target: goiTable.kanji,
           set: {
             furigana,
             kanji,
@@ -81,13 +81,13 @@ export const updateGoiAction = actionClient
     }) => {
       try {
         await db
-          .update(vocabularies)
+          .update(goiTable)
           .set({
             furigana,
             kanji,
             meaning,
           })
-          .where(eq(vocabularies.id, wordId));
+          .where(eq(goiTable.id, wordId));
       } catch (err) {
         console.log(err);
         throw new Error(messages.update.fail);
@@ -103,12 +103,12 @@ export const updateGoiAction = actionClient
 export const generateExampleAction = actionClient
   .inputSchema(
     z.object({
-      word: z.string().trim().min(1),
+      tango: z.string().trim().min(1),
     }),
   )
-  .action(async ({ parsedInput: { word } }) => {
+  .action(async ({ parsedInput: { tango } }) => {
     try {
-      const result = await generateJapaneseExamples(word);
+      const result = await generateJapaneseExamples(tango);
       return result;
     } catch (err) {
       console.log(err);
@@ -128,19 +128,19 @@ export const saveExampleAction = actionClient
       english: z.string().trim().min(1),
       indonesian: z.string().trim().min(1),
       romaji: z.string().trim().min(1),
-      vocabId: z.string().trim().min(1),
+      goiId: z.string().trim().min(1),
     }),
   )
   .action(
     async ({
-      parsedInput: { english, indonesian, japanese, romaji, vocabId },
+      parsedInput: { english, indonesian, japanese, romaji, goiId },
     }) => {
       try {
-        await db.insert(wordExamples).values({
+        await db.insert(reibunTable).values({
           english,
           indonesian,
           japanese,
-          vocabId,
+          goiId,
           romaji,
         });
       } catch (err) {
@@ -148,7 +148,7 @@ export const saveExampleAction = actionClient
         throw new Error(messages.saved.fail);
       }
 
-      revalidateTag(cacheKeys.goi.example(vocabId), "max");
+      revalidateTag(cacheKeys.goi.example(goiId), "max");
 
       return {
         message: messages.saved.success,

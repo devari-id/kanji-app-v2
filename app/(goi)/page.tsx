@@ -16,7 +16,7 @@ export default async function HomePage({
   return (
     <div className="space-y-4 my-4">
       <div className="sticky top-0 z-10 w-full space-y-4 bg-background py-4">
-        <Suspense>
+        <Suspense fallback={<p>loading...</p>}>
           <SuspenseForm sp={searchParams} />
         </Suspense>
       </div>
@@ -45,5 +45,5 @@ async function SuspenseVocabs({ sp }: { sp: SearchParams }) {
 async function SuspenseForm({ sp }: { sp: SearchParams }) {
   const { id } = await sp;
   const word = id ? await getWordById(id as string) : undefined;
-  return <FormGoi key={typeof id === "string" ? id : undefined} word={word} />;
+  return <FormGoi />;
 }

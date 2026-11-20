@@ -5,19 +5,19 @@ import { removeGoiAction, saveGoiAction, updateGoiAction } from "./actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
-import { Vocabulary } from "@/db/schema";
+import { Goi } from "@/db/schema";
 
 type Props = {
-  word?: Vocabulary;
+  tango?: Goi;
 };
 
-export default function FormGoi({ word }: Props) {
+export default function FormGoi({ tango }: Props) {
   const kanjiInputRef = useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState({
-    kanji: word ? word.kanji : "",
-    furigana: word ? (word.furigana ?? "") : "",
-    meaning: word ? (word.meaning ?? "") : "",
+    kanji: tango ? tango.kanji : "",
+    furigana: tango ? (tango.furigana ?? "") : "",
+    meaning: tango ? (tango.meaning ?? "") : "",
   });
 
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function FormGoi({ word }: Props) {
         kanji: "",
         meaning: "",
       });
-      if (word) {
+      if (tango) {
         router.replace("/");
       }
       toast.success(message);
@@ -49,7 +49,7 @@ export default function FormGoi({ word }: Props) {
     },
   });
 
-  const updateGoiActionWithBind = updateGoiAction.bind(null, word?.id ?? "");
+  const updateGoiActionWithBind = updateGoiAction.bind(null, tango?.id ?? "");
   const { execute: executeUpdateAction, isPending: isPendingUpdate } =
     useAction(updateGoiActionWithBind, {
       onSuccess: ({ data: { message } }) => {
@@ -77,14 +77,14 @@ export default function FormGoi({ word }: Props) {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (word) {
+    if (tango) {
       executeUpdateAction(new FormData(e.currentTarget));
     } else {
       execute(new FormData(e.currentTarget));
     }
   };
 
-  const { execute: executeRemoveWord, isPending: isPendingRemoveWord } =
+  const { execute: executeRemovetango, isPending: isPendingRemovetango } =
     useAction(removeGoiAction, {
       onSuccess: ({ data: { message } }) => {
         router.replace("/");
@@ -137,11 +137,11 @@ export default function FormGoi({ word }: Props) {
           >
             保存
           </button>
-          {word && (
+          {tango && (
             <button
-              disabled={isPendingRemoveWord}
+              disabled={isPendingRemovetango}
               type="button"
-              onClick={() => executeRemoveWord({ id: word.id })}
+              onClick={() => executeRemovetango({ id: tango.id })}
               className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
             >
               削除

@@ -30,7 +30,7 @@ async function SusFormEdit({ params }: { params: Promise<{ id: string }> }) {
   if (!goi) {
     redirect("/");
   } else {
-    return <FormGoi key={id} word={goi} />;
+    return <FormGoi key={id} tango={goi} />;
   }
 }
 
@@ -53,5 +53,5 @@ async function SusTabGoiExample({
     romaji: v.romaji,
   }));
 
-  return <TabGoi word={goi} key={goi.id} examples={mappedExamples} />;
+  return <TabGoi tango={goi} key={goi.id} examples={mappedExamples} />;
 }

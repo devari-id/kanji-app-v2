@@ -1,6 +1,6 @@
 "use client";
 
-import { Vocabulary } from "@/db/schema";
+import { Goi } from "@/db/schema";
 import { JapaneseExample } from "@/lib/gemini-service";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -9,11 +9,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/utils";
 import ExampleAccordion from "./example-accordion";
 
-export default function GenerateExampleWithGeminiButton({
-  word,
-}: {
-  word: Vocabulary;
-}) {
+export default function GenerateExampleWithGeminiButton({ goi }: { goi: Goi }) {
   const [examples, setExamples] = useState<JapaneseExample[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
@@ -22,7 +18,7 @@ export default function GenerateExampleWithGeminiButton({
     try {
       setLoading(true);
       const { data, serverError } = await generateExampleAction({
-        word: word.kanji,
+        tango: goi.kanji,
       });
       if (serverError) {
         console.log({ serverError });
@@ -62,7 +58,7 @@ export default function GenerateExampleWithGeminiButton({
       </button>
       <ExampleAccordion
         isEnabledSavedbutton
-        vocabId={word.id}
+        goiId={goi.id}
         examples={examples}
       />
     </div>

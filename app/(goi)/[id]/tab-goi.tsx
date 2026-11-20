@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Vocabulary } from "@/db/schema";
+import { Goi } from "@/db/schema";
 import { JapaneseExample } from "@/lib/gemini-service";
 import { OctagonAlert } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -11,11 +11,11 @@ import GenerateExampleWithGeminiButton from "../generate-example-button";
 import FormExample from "./form-example";
 
 type Props = {
-  word: Vocabulary;
+  tango: Goi;
   examples: JapaneseExample[];
 };
 
-export default function TabGoi({ word, examples }: Props) {
+export default function TabGoi({ tango, examples }: Props) {
   const tabs = [
     {
       value: "",
@@ -27,18 +27,18 @@ export default function TabGoi({ word, examples }: Props) {
             <OctagonAlert />
           </div>
         ) : (
-          <ExampleAccordion examples={examples} vocabId={word.id} />
+          <ExampleAccordion examples={examples} goiId={tango.id} />
         ),
     },
     {
       value: "create-example-manually",
       label: "Create Example Manually",
-      content: <FormExample goiId={word.id} key={word.id} />,
+      content: <FormExample goiId={tango.id} key={tango.id} />,
     },
     {
       value: "create-example-automatically",
       label: "Generate Example With AI",
-      content: <GenerateExampleWithGeminiButton word={word} key={word.id} />,
+      content: <GenerateExampleWithGeminiButton goi={tango} key={tango.id} />,
     },
   ];
 
