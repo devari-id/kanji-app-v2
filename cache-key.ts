@@ -13,6 +13,6 @@ export const cacheKeys = {
   kanji: {
     all: kanjis,
     detail: (id: string) => `${kanjis}-${id}`,
+    search: (kanji: string) => `kanji-search-${kanji}`,
   },
-  search: (kanjis: string) => `search-${kanjis}`,
 };

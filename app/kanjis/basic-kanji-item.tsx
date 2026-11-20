@@ -1,17 +1,23 @@
 "use client";
 
 import { KanjiItem } from "@/db/schema";
-import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function BasicKanjiItem({ kanji }: { kanji: KanjiItem }) {
   const router = useRouter();
   const pathname = usePathname();
+  const sp = useSearchParams();
+  const isActive = sp.get("id") === kanji.id;
   return (
     <div
       onClick={() =>
         router.push(`${pathname}?id=${kanji.id}`, { scroll: false })
       }
-      className="text-4xl cursor-pointer flex hover:text-rose-400 items-center justify-center group relative"
+      className={cn(
+        "text-4xl cursor-pointer flex  items-center justify-center group relative",
+        isActive ? "text-rose-500" : "hover:text-rose-400",
+      )}
     >
       {kanji.kanji}
     </div>

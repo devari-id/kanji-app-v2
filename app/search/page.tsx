@@ -2,6 +2,8 @@ import { SearchParams } from "@/types";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { findGoiByKanji, findKanjisByKanji } from "./queries";
+import { GoiItem } from "../(goi)/goi-item";
+import TableKanji from "./table-kanji";
 
 export default function SearchKanjiPage({
   searchParams,
@@ -25,20 +27,18 @@ async function SusKanji({ sp }: { sp: SearchParams }) {
   if (!query || typeof query !== "string") {
     redirect("/");
   }
-  const kanjis = await findKanjisByKanji(query);
+
+  const kanjis = findKanjisByKanji(query);
+
   return (
-    <div className="flex items-stretch justify-center gap-2">
-      {kanjis.map((k) => (
-        <div
-          key={k.id}
-          className="flex flex-col items-center border justify-center p-2 rounded-xl"
-        >
-          <div className="text-4xl font-mincho p-4">{k.kanji}</div>
-          <div className="max-w-40 text-center">{k.kunyomi}</div>
-          <div className="max-w-40 text-center">{k.onyomi}</div>
-          <div className="max-w-40 text-center">{k.meaning}</div>
-        </div>
-      ))}
+    <div className="space-y-4">
+      <div className="mb-4 flex justify-center">
+        <h1 className="font-medium">
+          Search result :
+          <span className="pl-2 underline underline-offset-4">{query}</span>
+        </h1>
+      </div>
+      <TableKanji promiseKanjis={kanjis} key={query} />
     </div>
   );
 }
@@ -49,5 +49,11 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
     redirect("/");
   }
   const goi = await findGoiByKanji(query);
-  return <div>{JSON.stringify(goi)}</div>;
+  return (
+    <div className="flex flex-wrap gap-4 border-foreground/20 my-8">
+      {goi.map((e, i) => (
+        <GoiItem item={e} key={e.id ?? i} />
+      ))}
+    </div>
+  );
 }

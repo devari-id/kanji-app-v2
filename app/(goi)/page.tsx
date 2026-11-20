@@ -21,13 +21,13 @@ export default async function HomePage({
         </Suspense>
       </div>
       <Suspense>
-        <SuspenseVocabs sp={searchParams} />
+        <SusGoi sp={searchParams} />
       </Suspense>
     </div>
   );
 }
 
-async function SuspenseVocabs({ sp }: { sp: SearchParams }) {
+async function SusGoi({ sp }: { sp: SearchParams }) {
   const { query } = await sp;
   const isNoFilter = !query || typeof query !== "string";
   const vocabs = isNoFilter

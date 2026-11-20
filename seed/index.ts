@@ -8,10 +8,10 @@ import { drizzle } from "drizzle-orm/neon-http";
 const sql = neon(process.env.DATABASE_URL!);
 
 // Inisialisasi db dengan schema agar bisa melakukan query relational jika diperlukan
-export const db = drizzle({ client: sql, relations });
+const db = drizzle({ client: sql, relations });
 
 import { kanjiList } from "./kanji-n4";
-import { kanjis } from "@/db/schema";
+import { kanjiTable } from "@/db/schema";
 
 const seedKanji = async () => {
   const data = kanjiList.map((k) => ({
@@ -23,9 +23,9 @@ const seedKanji = async () => {
 
   try {
     await db
-      .insert(kanjis)
+      .insert(kanjiTable)
       .values(data)
-      .onConflictDoNothing({ target: kanjis.kanji });
+      .onConflictDoNothing({ target: kanjiTable.kanji });
   } catch (err) {
     console.error(err);
     throw err;

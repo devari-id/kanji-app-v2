@@ -22,16 +22,11 @@ export default function FormGoi({ tango }: Props) {
 
   const router = useRouter();
 
+  const formRef = useRef<HTMLFormElement>(null);
   const { execute, isPending } = useAction(saveGoiAction, {
     onSuccess: ({ data: { message } }) => {
-      setFormState({
-        furigana: "",
-        kanji: "",
-        meaning: "",
-      });
-      if (tango) {
-        router.replace("/");
-      }
+      kanjiInputRef.current?.focus();
+      formRef.current?.reset();
       toast.success(message);
     },
     onError: ({ error: { thrownError, validationErrors } }) => {
@@ -41,11 +36,6 @@ export default function FormGoi({ tango }: Props) {
       if (thrownError) {
         toast.error(thrownError.message!);
       }
-    },
-    onSettled: () => {
-      setTimeout(() => {
-        kanjiInputRef.current?.focus();
-      }, 150);
     },
   });
 
@@ -95,6 +85,7 @@ export default function FormGoi({ tango }: Props) {
   return (
     <fieldset disabled={isPending || isPendingUpdate}>
       <form
+        ref={formRef}
         onSubmit={handleSubmit}
         className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
       >
@@ -104,8 +95,9 @@ export default function FormGoi({ tango }: Props) {
             autoComplete="off"
             type="text"
             name="kanji"
-            value={formState.kanji}
-            onChange={handleChange}
+            defaultValue={tango?.kanji}
+            // value={formState.kanji}
+            // onChange={handleChange}
             placeholder="漢字"
             className="outline-none border-none h-full text-5xl px-4 bg-foreground/20 box-border w-full"
           />
@@ -115,8 +107,9 @@ export default function FormGoi({ tango }: Props) {
             autoComplete="off"
             type="text"
             name="furigana"
-            value={formState.furigana}
-            onChange={handleChange}
+            defaultValue={tango?.furigana}
+            // value={formState.furigana}
+            // onChange={handleChange}
             placeholder="ふりがな"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
@@ -124,8 +117,9 @@ export default function FormGoi({ tango }: Props) {
             autoComplete="off"
             type="text"
             name="meaning"
-            value={formState.meaning}
-            onChange={handleChange}
+            defaultValue={tango?.meaning}
+            // value={formState.meaning}
+            // onChange={handleChange}
             placeholder="意味"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />

@@ -8,7 +8,7 @@ import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import RemoveKanjiButton from "./remove-kanji-button";
 
-export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
+export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
   const router = useRouter();
 
   const inputKanjiRef = useRef<HTMLInputElement>(null);
@@ -106,7 +106,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
         onSubmit={handleSubmit}
         className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
       >
-        <div className="h-full gap-x-1 flex items-center flex-2">
+        <div className="h-full gap-x-1 flex items-center flex-1 border">
           <input
             ref={inputKanjiRef}
             type="text"
@@ -114,7 +114,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
             value={formState.kanji}
             onChange={handleChange}
             placeholder="漢字"
-            className="outline-none border-none h-full text-4xl px-4 bg-foreground/20 box-border flex-1"
+            className="outline-none border-none h-full max-w-40 text-4xl px-4 bg-foreground/20 box-border"
           />
           <textarea
             placeholder="note"
@@ -126,11 +126,23 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
                 note: e.target.value,
               });
             }}
-            className="outline-none border-none h-full p-4 bg-foreground/20 box-border flex-1 resize-none"
+            className="outline-none border-none h-full p-4 bg-foreground/20 box-border resize-none"
+          />
+          <textarea
+            placeholder="meaning"
+            name="meaning"
+            value={formState.meaning}
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                meaning: e.target.value,
+              });
+            }}
+            className="outline-none border-none h-full p-4 bg-foreground/20 box-border resize-none"
           />
         </div>
 
-        <div className="flex flex-col h-full gap-y-1">
+        <div className="flex flex-2 flex-col h-full gap-y-1">
           <input
             type="text"
             name="kunyomi"
@@ -149,15 +161,7 @@ export default function FormAddKanji({ kanji }: { kanji?: KanjiItem }) {
           />
         </div>
 
-        <div className="flex flex-col h-full gap-y-1">
-          <input
-            type="text"
-            name="meaning"
-            value={formState.meaning}
-            onChange={handleChange}
-            placeholder="意味"
-            className="outline-none border-none text-base flex-1 px-3 bg-foreground/20 w-full box-border"
-          />
+        <div className="flex h-full gap-y-1 min-w-40">
           <div className="shrink-0 flex-1">
             <div className="flex items-center h-full gap-x-1">
               <button
