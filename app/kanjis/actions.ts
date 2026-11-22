@@ -58,7 +58,9 @@ export const saveKanjiAction = actionClient
         console.error(err);
         throw new Error(messages.saved.fail);
       }
+
       updateTag(cacheKeys.kanji.all);
+      updateTag("search-kanji");
 
       return {
         message: messages.saved.success,

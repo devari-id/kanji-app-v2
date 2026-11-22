@@ -19,7 +19,7 @@ const removeUndefinedQueryResult = <T>(
 
 export const findGoiByKanji = async (kanji: string) => {
   "use cache";
-  cacheTag(cacheKeys.goi.search(kanji));
+  cacheTag("search-goi", cacheKeys.goi.search(kanji));
 
   const uniqueChars = refineKanji(kanji);
 
@@ -43,7 +43,7 @@ export const findGoiByKanji = async (kanji: string) => {
 
 export const findKanjisByKanji = async (kanji: string) => {
   "use cache";
-  cacheTag(cacheKeys.kanji.search(kanji));
+  cacheTag("search-kanji", cacheKeys.kanji.search(kanji));
 
   const uniqueChars = refineKanji(kanji);
   const results = await Promise.all(

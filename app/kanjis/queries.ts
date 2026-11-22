@@ -7,7 +7,7 @@ export const getBasicKanji = async () => {
   cacheTag(cacheKeys.kanji.all);
 
   const result = await db.query.kanjiTable.findMany({
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
   });
   return result;
 };

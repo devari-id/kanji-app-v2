@@ -20,6 +20,7 @@ export const kanjiTable = pgTable("kanji_table", {
   note: text("note"),
   onyomi: text("onyomi"),
   meaning: text("meaning").notNull(),
+  level: text("level").notNull().default("N4"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

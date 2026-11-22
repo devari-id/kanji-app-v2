@@ -63,11 +63,10 @@ export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
     updateKanjiActionWithBind,
     {
       onSuccess: ({ data: { message } }) => {
+        inputKanjiRef.current?.focus();
         toast.success(message);
-        resetFormState();
-        router.replace("/kanjis");
       },
-      onError: ({ error: { thrownError, validationErrors } }) => {
+      onError: ({ error: { validationErrors, thrownError } }) => {
         if (thrownError) {
           toast.error(thrownError.message);
         }
@@ -75,11 +74,6 @@ export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
           console.log(validationErrors);
           toast.error("kanji id is missing");
         }
-      },
-      onSettled: () => {
-        setTimeout(() => {
-          inputKanjiRef.current?.focus();
-        }, 250);
       },
     },
   );

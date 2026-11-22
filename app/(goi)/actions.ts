@@ -65,6 +65,7 @@ export const saveGoiAction = actionClient
     }
 
     updateTag(cacheKeys.goi.all);
+    updateTag("search-goi");
 
     return {
       message: messages.saved.success,

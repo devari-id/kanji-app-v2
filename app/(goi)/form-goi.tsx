@@ -14,12 +14,6 @@ type Props = {
 export default function FormGoi({ tango }: Props) {
   const kanjiInputRef = useRef<HTMLInputElement>(null);
 
-  const [formState, setFormState] = useState({
-    kanji: tango ? tango.kanji : "",
-    furigana: tango ? (tango.furigana ?? "") : "",
-    meaning: tango ? (tango.meaning ?? "") : "",
-  });
-
   const router = useRouter();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -58,13 +52,6 @@ export default function FormGoi({ tango }: Props) {
       },
     });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (tango) {
@@ -77,7 +64,6 @@ export default function FormGoi({ tango }: Props) {
   const { execute: executeRemovetango, isPending: isPendingRemovetango } =
     useAction(removeGoiAction, {
       onSuccess: ({ data: { message } }) => {
-        router.replace("/");
         toast.success(message);
       },
     });
@@ -92,34 +78,25 @@ export default function FormGoi({ tango }: Props) {
         <div className="h-full flex-1">
           <input
             ref={kanjiInputRef}
-            autoComplete="off"
             type="text"
             name="kanji"
             defaultValue={tango?.kanji}
-            // value={formState.kanji}
-            // onChange={handleChange}
             placeholder="漢字"
             className="outline-none border-none h-full text-5xl px-4 bg-foreground/20 box-border w-full"
           />
         </div>
         <div className="flex flex-1 flex-col h-full gap-y-1">
           <input
-            autoComplete="off"
             type="text"
             name="furigana"
             defaultValue={tango?.furigana}
-            // value={formState.furigana}
-            // onChange={handleChange}
             placeholder="ふりがな"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
           <input
-            autoComplete="off"
             type="text"
             name="meaning"
             defaultValue={tango?.meaning}
-            // value={formState.meaning}
-            // onChange={handleChange}
             placeholder="意味"
             className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
