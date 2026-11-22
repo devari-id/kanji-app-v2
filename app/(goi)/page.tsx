@@ -2,11 +2,7 @@ import { SearchParams } from "@/types";
 import { Suspense } from "react";
 import FormGoi from "./form-goi";
 import { GoiItem } from "./goi-item";
-import {
-  findVocabsByKanjiComponent,
-  getAllVocabs,
-  getWordById,
-} from "./queries";
+import { findVocabsByKanjiComponent, getAllVocabs } from "./queries";
 
 export default async function HomePage({
   searchParams,
@@ -16,9 +12,7 @@ export default async function HomePage({
   return (
     <div className="space-y-4 my-4">
       <div className="sticky top-0 z-10 w-full space-y-4 bg-background py-4">
-        <Suspense fallback={<p>loading...</p>}>
-          <SuspenseForm sp={searchParams} />
-        </Suspense>
+        <FormGoi />
       </div>
       <Suspense>
         <SusGoi sp={searchParams} />
@@ -40,10 +34,4 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
       ))}
     </div>
   );
-}
-
-async function SuspenseForm({ sp }: { sp: SearchParams }) {
-  const { id } = await sp;
-  const word = id ? await getWordById(id as string) : undefined;
-  return <FormGoi />;
 }

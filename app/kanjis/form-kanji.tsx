@@ -3,14 +3,11 @@
 import { saveKanjiAction, updateKanjiAction } from "@/app/kanjis/actions";
 import { KanjiItem } from "@/db/schema";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import RemoveKanjiButton from "./remove-kanji-button";
 
 export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
-  const router = useRouter();
-
   const inputKanjiRef = useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState({

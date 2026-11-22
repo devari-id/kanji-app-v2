@@ -1,13 +1,13 @@
 "use client";
 
+import { Goi } from "@/db/schema";
+import { usePathname } from "next/navigation";
 import { SubmitEvent, useEffect, useId, useRef, useState } from "react";
-import TotalVocabInput from "./total-vocab";
 import useMeasure from "react-use-measure";
-import { Vocabulary } from "@/db/schema";
-import { usePathname, useRouter } from "next/navigation";
+import TotalVocabInput from "./total-vocab";
 
 type Props = {
-  vocabs: Vocabulary[];
+  vocabs: Goi[];
 };
 
 export default function FormExercise({ vocabs }: Props) {
@@ -72,7 +72,7 @@ export default function FormExercise({ vocabs }: Props) {
   );
 }
 
-function ExerciseInput({ word, index }: { word: Vocabulary; index: number }) {
+function ExerciseInput({ word, index }: { word: Goi; index: number }) {
   const id = useId();
   const [ref, { height }] = useMeasure();
 

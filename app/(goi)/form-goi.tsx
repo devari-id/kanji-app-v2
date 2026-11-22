@@ -1,11 +1,10 @@
 "use client";
 
-import { ChangeEvent, SubmitEvent, useRef, useState } from "react";
-import { removeGoiAction, saveGoiAction, updateGoiAction } from "./actions";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useAction } from "next-safe-action/hooks";
 import { Goi } from "@/db/schema";
+import { useAction } from "next-safe-action/hooks";
+import { SubmitEvent, useRef } from "react";
+import toast from "react-hot-toast";
+import { removeGoiAction, saveGoiAction, updateGoiAction } from "./actions";
 
 type Props = {
   tango?: Goi;
@@ -13,9 +12,6 @@ type Props = {
 
 export default function FormGoi({ tango }: Props) {
   const kanjiInputRef = useRef<HTMLInputElement>(null);
-
-  const router = useRouter();
-
   const formRef = useRef<HTMLFormElement>(null);
   const { execute, isPending } = useAction(saveGoiAction, {
     onSuccess: ({ data: { message } }) => {
