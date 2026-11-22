@@ -1,7 +1,7 @@
 "use client";
 
 import { KanjiItem } from "@/db/schema";
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function BasicKanjiItem({ kanji }: { kanji: KanjiItem }) {

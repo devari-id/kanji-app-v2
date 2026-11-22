@@ -1,10 +1,7 @@
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 
-// Inisialisasi klien Gemini menggunakan GEMINI_API_KEY dari environment variable
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const ai2 = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY_2 });
 
-// Definisikan struktur skema output JSON yang diinginkan menggunakan Structured Outputs
 const japaneseSentenceSchema: Schema = {
   type: Type.OBJECT,
   properties: {
@@ -73,7 +70,6 @@ export async function generateJapaneseExamples(
       throw new Error("Gagal mendapatkan respons dari Gemini API.");
     }
 
-    // Parsing hasil string JSON dari Gemini
     const result: JapaneseExample[] = JSON.parse(response.text);
     return result;
   } catch (error) {

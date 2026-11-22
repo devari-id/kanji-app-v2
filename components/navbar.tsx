@@ -1,7 +1,7 @@
 "use client";
 
 import SearchGoiForm from "@/app/(goi)/search-goi-form";
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";

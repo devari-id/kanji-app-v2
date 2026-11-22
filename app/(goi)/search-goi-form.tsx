@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/utils";
+import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import Form from "next/form";
 import { usePathname } from "next/navigation";
