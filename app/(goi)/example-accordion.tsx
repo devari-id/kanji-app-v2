@@ -21,11 +21,11 @@ type SaveExample = {
 
 export default function ExampleAccordion({
   examples,
-  vocabId,
+  goiId,
   isEnabledSavedbutton = false,
 }: {
   examples: JapaneseExample[];
-  vocabId: string;
+  goiId: string;
   isEnabledSavedbutton?: boolean;
 }) {
   const updatedExamples = examples.map((e, i) => ({
@@ -50,7 +50,7 @@ export default function ExampleAccordion({
                 <div className="flex items-center gap-x-4 justify-end">
                   <SaveExampleButton
                     data={{ english, indonesian, japanese, romaji }}
-                    vocabId={vocabId}
+                    goiId={goiId}
                   />
                 </div>
               )}
@@ -64,10 +64,10 @@ export default function ExampleAccordion({
 
 function SaveExampleButton({
   data: { english, indonesian, japanese, romaji },
-  vocabId,
+  goiId,
 }: {
   data: SaveExample;
-  vocabId: string;
+  goiId: string;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -80,7 +80,7 @@ function SaveExampleButton({
       indonesian,
       japanese,
       romaji,
-      vocabId,
+      goiId,
     });
     if (data) {
       toast.success(data.message);

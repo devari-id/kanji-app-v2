@@ -2,7 +2,7 @@
 
 import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
-import { wordExamples } from "@/db/schema";
+import { reibunTable } from "@/db/schema";
 import { actionClient } from "@/lib/safe-action";
 import { messages } from "@/toast-messages";
 import { updateTag } from "next/cache";
@@ -22,21 +22,21 @@ export const saveExampleAction = actionClient
   .action(
     async ({
       parsedInput: { english, indonesian, japanese, romaji },
-      bindArgsParsedInputs: [vocabId],
+      bindArgsParsedInputs: [goiId],
     }) => {
       try {
-        await db.insert(wordExamples).values({
+        await db.insert(reibunTable).values({
           english,
           indonesian,
           japanese,
           romaji,
-          vocabId,
+          goiId,
         });
       } catch (err) {
         console.log(err);
         throw new Error(messages.saved.fail);
       }
-      updateTag(cacheKeys.goi.example(vocabId));
+      updateTag(cacheKeys.goi.example(goiId));
       return {
         message: messages.saved.success,
       };

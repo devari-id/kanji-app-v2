@@ -1,35 +1,44 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Vocabulary } from "@/db/schema";
-import { Fragment } from "react/jsx-runtime";
-import GenerateExampleWithGeminiButton from "../generate-example-button";
-import ExampleAccordion from "../example-accordion";
+import { Goi } from "@/db/schema";
 import { JapaneseExample } from "@/lib/gemini-service";
-import FormExample from "./form-example";
+import { OctagonAlert } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Fragment } from "react/jsx-runtime";
+import ExampleAccordion from "../example-accordion";
+import GenerateExampleWithGeminiButton from "../generate-example-button";
+import FormExample from "./form-example";
 
 type Props = {
-  word: Vocabulary;
+  tango: Goi;
   examples: JapaneseExample[];
 };
 
-export default function TabGoi({ word, examples }: Props) {
+export default function TabGoi({ tango, examples }: Props) {
   const tabs = [
     {
       value: "",
       label: "Examples",
-      content: <ExampleAccordion examples={examples} vocabId={word.id} />,
+      content:
+        examples.length === 0 ? (
+          <div className="p-4 text-xl text-muted-foreground font-medium flex items-center gap-x-2">
+            <p className="">例文はまだありません</p>
+            <OctagonAlert />
+          </div>
+        ) : (
+          <ExampleAccordion examples={examples} goiId={tango.id} />
+        ),
     },
     {
       value: "create-example-manually",
       label: "Create Example Manually",
-      content: <FormExample goiId={word.id} key={word.id} />,
+      content: <FormExample goiId={tango.id} key={tango.id} />,
     },
     {
       value: "create-example-automatically",
       label: "Generate Example With AI",
-      content: <GenerateExampleWithGeminiButton word={word} key={word.id} />,
+      content: <GenerateExampleWithGeminiButton goi={tango} key={tango.id} />,
     },
   ];
 

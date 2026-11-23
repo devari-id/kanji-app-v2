@@ -2,7 +2,7 @@
 
 import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
-import { kanjis } from "@/db/schema";
+import { kanjiTable } from "@/db/schema";
 import { actionClient } from "@/lib/safe-action";
 import { messages } from "@/toast-messages";
 import { eq } from "drizzle-orm";
@@ -26,7 +26,7 @@ export const removeKanjiAction = actionClient
   )
   .action(async ({ parsedInput: { kanjiId } }) => {
     try {
-      await db.delete(kanjis).where(eq(kanjis.id, kanjiId));
+      await db.delete(kanjiTable).where(eq(kanjiTable.id, kanjiId));
     } catch (err) {
       console.log(err);
       throw new Error(messages.remove.fail);
@@ -43,7 +43,7 @@ export const saveKanjiAction = actionClient
     async ({ parsedInput: { kanji, kunyomi, meaning, onyomi, note } }) => {
       try {
         await db
-          .insert(kanjis)
+          .insert(kanjiTable)
           .values({
             kanji,
             meaning,
@@ -52,13 +52,15 @@ export const saveKanjiAction = actionClient
             note,
           })
           .onConflictDoNothing({
-            target: kanjis.kanji,
+            target: kanjiTable.kanji,
           });
       } catch (err) {
         console.error(err);
         throw new Error(messages.saved.fail);
       }
+
       updateTag(cacheKeys.kanji.all);
+      updateTag("search-kanji");
 
       return {
         message: messages.saved.success,
@@ -76,7 +78,7 @@ export const updateKanjiAction = actionClient
     }) => {
       try {
         await db
-          .update(kanjis)
+          .update(kanjiTable)
           .set({
             kanji,
             kunyomi,
@@ -84,7 +86,7 @@ export const updateKanjiAction = actionClient
             onyomi,
             note,
           })
-          .where(eq(kanjis.id, kanjiId));
+          .where(eq(kanjiTable.id, kanjiId));
       } catch (err) {
         console.log(err);
         throw new Error(messages.update.fail);

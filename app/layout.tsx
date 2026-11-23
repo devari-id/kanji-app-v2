@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full", "antialiased", sans.variable, mincho.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <NextTopLoader />
+        <NextTopLoader showSpinner={false} color="#ff2056" />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

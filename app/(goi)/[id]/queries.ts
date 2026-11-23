@@ -6,9 +6,9 @@ export const getWordExamples = async (id: string) => {
   "use cache";
   cacheTag(cacheKeys.goi.example(id));
 
-  const data = await db.query.wordExamples.findMany({
+  const data = await db.query.reibunTable.findMany({
     where: {
-      vocabId: id,
+      goiId: id,
     },
   });
   return data;

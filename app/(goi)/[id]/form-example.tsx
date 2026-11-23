@@ -19,7 +19,9 @@ type Props = {
 
 export default function FormExample({ goiId }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
+
   const saveExampleActionBind = saveExampleAction.bind(null, goiId);
+
   const { execute, isPending } = useAction(saveExampleActionBind, {
     onSuccess(args) {
       toast.success(args.data.message);
@@ -39,14 +41,15 @@ export default function FormExample({ goiId }: Props) {
     e.preventDefault();
     execute(new FormData(e.currentTarget));
   };
+
   return (
     <fieldset disabled={isPending}>
       <form ref={formRef} onSubmit={handleSubmit} className="p-4">
         <FieldGroup>
-          <InputExample label="Indonesian" name="indonesian" />
           <InputExample label="Japanese" name="japanese" />
-          <InputExample label="English" name="english" />
           <InputExample label="Romaji" name="romaji" />
+          <InputExample label="Indonesian" name="indonesian" />
+          <InputExample label="English" name="english" />
           <Field orientation={"horizontal"}>
             <Button type="submit" className="font-medium" size={"lg"}>
               Save

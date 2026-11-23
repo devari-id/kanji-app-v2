@@ -1,7 +1,7 @@
 import { SearchParams } from "@/types";
 import { Suspense } from "react";
 import BasicKanjiItem from "./basic-kanji-item";
-import FormAddKanji from "./form-add-kanji";
+import FormKanji from "./form-kanji";
 import { getBasicKanji, getBasicKanjiById } from "./queries";
 
 export default async function KanjiPage({
@@ -18,11 +18,13 @@ export default async function KanjiPage({
           <SuspenseForm sp={searchParams} />
         </Suspense>
       </div>
-      <div className="grid grid-cols-10 my-8 gap-y-4">
-        {kanjis.map((kanji) => (
-          <BasicKanjiItem kanji={kanji} key={kanji.id} />
-        ))}
-      </div>
+      <Suspense>
+        <div className="grid grid-cols-10 my-8 gap-y-4">
+          {kanjis.map((kanji) => (
+            <BasicKanjiItem kanji={kanji} key={kanji.id} />
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 }
@@ -31,6 +33,6 @@ async function SuspenseForm({ sp }: { sp: SearchParams }) {
   const { id } = await sp;
   const kanji = id ? await getBasicKanjiById(id as string) : undefined;
   return (
-    <FormAddKanji key={typeof id === "string" ? id : undefined} kanji={kanji} />
+    <FormKanji key={typeof id === "string" ? id : undefined} kanji={kanji} />
   );
 }

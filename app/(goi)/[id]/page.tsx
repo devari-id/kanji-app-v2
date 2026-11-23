@@ -13,10 +13,10 @@ export default async function GoiDetailPage({
 }) {
   return (
     <div className="sticky space-y-4 top-0 z-10 w-full bg-background py-4">
-      <Suspense fallback={<p>loading...</p>}>
+      <Suspense>
         <SusFormEdit params={params} />
       </Suspense>
-      <Suspense fallback={<p>loading...</p>}>
+      <Suspense>
         <SusTabGoiExample params={params} />
       </Suspense>
     </div>
@@ -30,7 +30,7 @@ async function SusFormEdit({ params }: { params: Promise<{ id: string }> }) {
   if (!goi) {
     redirect("/");
   } else {
-    return <FormGoi key={id} word={goi} />;
+    return <FormGoi key={id} tango={goi} />;
   }
 }
 
@@ -53,5 +53,5 @@ async function SusTabGoiExample({
     romaji: v.romaji,
   }));
 
-  return <TabGoi word={goi} key={goi.id} examples={mappedExamples} />;
+  return <TabGoi tango={goi} key={goi.id} examples={mappedExamples} />;
 }
