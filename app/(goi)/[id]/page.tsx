@@ -23,6 +23,7 @@ export default async function GoiDetailPage({
   );
 }
 
+
 async function SusFormEdit({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const goi = await getWordById(id);

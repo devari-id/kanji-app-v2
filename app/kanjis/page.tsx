@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import BasicKanjiItem from "./basic-kanji-item";
 import FormKanji from "./form-kanji";
 import { getBasicKanji, getBasicKanjiById } from "./queries";
+import FormKanjiV2 from "./form-kanji-v2";
 
 export default async function KanjiPage({
   searchParams,
@@ -14,6 +15,7 @@ export default async function KanjiPage({
   return (
     <div className="my-4">
       <div className="sticky top-0 z-10 w-full bg-background py-4">
+        {/*<FormKanjiV2 />*/}
         <Suspense fallback={<p>loading...</p>}>
           <SuspenseForm sp={searchParams} />
         </Suspense>

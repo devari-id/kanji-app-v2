@@ -95,45 +95,58 @@ export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
     <fieldset disabled={isPendingSave || isPendingUpdate}>
       <form
         onSubmit={handleSubmit}
-        className="flex w-full h-24 gap-1 rounded-xl overflow-hidden"
+        className="w-full flex items-stretch gap-0.5 flex-wrap overflow-hidden rounded-xl h-20"
       >
-        <div className="h-full gap-x-1 flex items-center flex-1 border">
-          <input
-            ref={inputKanjiRef}
-            type="text"
-            name="kanji"
-            value={formState.kanji}
-            onChange={handleChange}
-            placeholder="漢字"
-            className="outline-none border-none h-full max-w-40 text-4xl px-4 bg-foreground/20 box-border"
-          />
-          <textarea
-            placeholder="note"
-            name="note"
-            value={formState.note}
-            onChange={(e) => {
-              setFormState({
-                ...formState,
-                note: e.target.value,
-              });
-            }}
-            className="outline-none border-none h-full p-4 bg-foreground/20 box-border resize-none"
-          />
-          <textarea
-            placeholder="meaning"
-            name="meaning"
-            value={formState.meaning}
-            onChange={(e) => {
-              setFormState({
-                ...formState,
-                meaning: e.target.value,
-              });
-            }}
-            className="outline-none border-none h-full p-4 bg-foreground/20 box-border resize-none"
-          />
+        <div className="gap-x-1 flex items-center flex-1 border">
+          <div className="h-full w-40 flex items-center justify-center relative">
+            <input
+              ref={inputKanjiRef}
+              type="text"
+              name="kanji"
+              value={formState.kanji}
+              onChange={handleChange}
+              placeholder="漢字"
+              className="outline-none border-none absolute inset-0 text-5xl px-4 bg-foreground/20 box-border"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-2 flex-col h-full gap-y-1">
+        <div className="h-full">
+          <div className="h-full w-full border-4 border-foreground/20">
+            <textarea
+              placeholder="note"
+              name="note"
+              value={formState.note}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  note: e.target.value,
+                });
+              }}
+              className="outline-none border-none bg-foreground/20 h-full px-2 box-border resize-none"
+            />
+          </div>
+        </div>
+
+        <div className="h-full">
+          <div className="h-full w-full border-4 border-foreground/20">
+            <textarea
+              placeholder="meaning"
+              name="meaning"
+              value={formState.meaning}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  meaning: e.target.value,
+                });
+              }}
+              className="outline-none border-none bg-foreground/20 h-full px-2 box-border resize-none"
+            />
+          </div>
+        </div>
+
+
+        <div className="flex flex-2 flex-col gap-y-0.5">
           <input
             type="text"
             name="kunyomi"
@@ -152,7 +165,7 @@ export default function FormKanji({ kanji }: { kanji?: KanjiItem }) {
           />
         </div>
 
-        <div className="flex h-full gap-y-1 min-w-40">
+        <div className="flex gap-y-0.5 min-w-40">
           <div className="shrink-0 flex-1">
             <div className="flex items-center h-full gap-x-1">
               <button
