@@ -1,6 +1,6 @@
 import { SearchParams } from "@/types";
 import { Suspense } from "react";
-import FormGoi from "./form-goi";
+import DialogForm from "./dialog-add-tango";
 import { GoiItem } from "./goi-item";
 import { findVocabsByKanjiComponent, getAllVocabs } from "./queries";
 
@@ -10,10 +10,7 @@ export default async function HomePage({
   searchParams: SearchParams;
 }) {
   return (
-    <div className="space-y-4 my-4">
-      <div className="sticky top-0 z-10 w-full space-y-4 bg-background py-4">
-        <FormGoi />
-      </div>
+    <div className="my-8">
       <Suspense>
         <SusGoi sp={searchParams} />
       </Suspense>
@@ -28,7 +25,10 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
     ? await getAllVocabs()
     : await findVocabsByKanjiComponent(query);
   return (
-    <div className="flex flex-wrap gap-4 border-foreground/20 my-8">
+    <div className="flex flex-wrap gap-8 px-2 items-center">
+      <div className="">
+        <DialogForm />
+      </div>
       {vocabs.map((e, i) => (
         <GoiItem item={e} key={e.id ?? i} />
       ))}

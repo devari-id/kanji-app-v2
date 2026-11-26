@@ -15,7 +15,7 @@ export default function BasicKanjiItem({ kanji }: { kanji: KanjiItem }) {
         router.push(`${pathname}?id=${kanji.id}`, { scroll: false })
       }
       className={cn(
-        "text-4xl cursor-pointer flex font-mincho items-center justify-center group relative",
+        "text-4xl cursor-pointer flex font-mincho items-center justify-center",
         isActive ? "text-rose-500" : "hover:text-rose-400",
       )}
     >

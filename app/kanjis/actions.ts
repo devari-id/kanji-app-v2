@@ -85,6 +85,7 @@ export const updateKanjiAction = actionClient
             meaning,
             onyomi,
             note,
+            updatedAt: new Date(),
           })
           .where(eq(kanjiTable.id, kanjiId));
       } catch (err) {

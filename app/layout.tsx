@@ -1,6 +1,6 @@
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
-import { Space_Grotesk, IBM_Plex_Sans_JP } from "next/font/google";
+import { IBM_Plex_Sans_JP, Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ const mincho = IBM_Plex_Sans_JP({
   weight: ["100", "400"],
 });
 
-const sans = Space_Grotesk({
+const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
 });
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="container mx-auto border border-foreground/10 min-h-screen p-4">
+          <div className="container mx-auto min-h-screen">
             <Suspense>
               <Navbar />
             </Suspense>

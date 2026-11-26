@@ -19,6 +19,7 @@ export const getAllVocabs = async () => {
   cacheTag(cacheKeys.goi.all);
 
   const data = await db.query.goiTable.findMany({
+    limit: 50,
     orderBy: { createdAt: "desc", reviewCount: "asc" },
   });
   return data;

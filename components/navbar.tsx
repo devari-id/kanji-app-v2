@@ -8,7 +8,7 @@ import { Fragment } from "react/jsx-runtime";
 
 const links = [
   {
-    name: "単語",
+    name: "語彙",
     to: "/",
   },
   {
@@ -16,7 +16,7 @@ const links = [
     to: "/goi-exercise",
   },
   {
-    name: "基本漢字",
+    name: "漢字",
     to: "/kanjis",
   },
 ];
@@ -25,24 +25,22 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center px-4 py-2 rounded-xl border border-foreground/20">
+    <nav className="flex items-center mx-4 h-16 border-b">
       <ul className="flex items-center gap-x-8 flex-1">
         {links.map((link, i) => (
           <Fragment key={i}>
             <li
               className={cn(
-                pathname === link.to ? "font-medium text-rose-500" : "",
+                "relative",
+                pathname === link.to ? "font-semibold" : "",
               )}
             >
-              <Link
-                className={cn(
-                  "text-3xl font-mincho ",
-                  pathname === link.to ? "underline underline-offset-8" : "",
-                )}
-                href={link.to}
-              >
+              <Link className={cn("text-2xl font-mincho ")} href={link.to}>
                 {link.name}
               </Link>
+              {pathname === link.to && (
+                <hr className="border-foreground border-2 absolute inset-x-0 -bottom-4" />
+              )}
             </li>
           </Fragment>
         ))}
