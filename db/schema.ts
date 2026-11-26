@@ -37,3 +37,4 @@ export const reibunTable = pgTable("reibun_table", {
     .references(() => goiTable.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+export type Reibun = typeof reibunTable.$inferSelect;

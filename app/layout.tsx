@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={cn("h-full", "antialiased", sans.variable, mincho.variable)}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="">
         <NextTopLoader showSpinner={false} color="#ff2056" />
         <ThemeProvider
           attribute="class"
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="container mx-auto min-h-screen">
+          <div className="container mx-auto min-h-screen flex flex-col">
             <Suspense>
               <Navbar />
             </Suspense>

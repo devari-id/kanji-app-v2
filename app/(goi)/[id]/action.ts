@@ -2,12 +2,40 @@
 
 import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
-import { reibunTable } from "@/db/schema";
+import { Reibun, reibunTable } from "@/db/schema";
 import { actionClient } from "@/lib/safe-action";
 import { messages } from "@/toast-messages";
 import { updateTag } from "next/cache";
+import { cookies } from "next/headers";
 import z from "zod";
 import { zfd } from "zod-form-data";
+
+export const markExampleToExercise = actionClient
+  .inputSchema(
+    z.object({
+      id: z.string(),
+      japanese: z.string(),
+      english: z.string(),
+      indonesian: z.string(),
+    }),
+  )
+  .action(async ({ parsedInput }) => {
+    const ckie = await cookies();
+    const exerciseReibun = ckie.get("exercise-reibun");
+    if (!exerciseReibun?.value) {
+      ckie.set("exercise-reibun", JSON.stringify([parsedInput]));
+    } else {
+      const arrayObj = JSON.parse(exerciseReibun.value) as Pick<
+        Reibun,
+        "english" | "id" | "japanese" | "indonesian"
+      >[];
+      const isThere = arrayObj.find((v) => v.id === parsedInput.id);
+      if (!isThere) {
+        const updatedData = [parsedInput, ...arrayObj];
+        ckie.set("exercise-reibun", JSON.stringify(updatedData));
+      }
+    }
+  });
 
 export const saveExampleAction = actionClient
   .inputSchema(

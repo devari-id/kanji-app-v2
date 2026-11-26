@@ -25,7 +25,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center mx-4 h-16 border-b">
+    <nav className="flex items-center mx-4 h-20 border-b">
       <ul className="flex items-center gap-x-8 flex-1">
         {links.map((link, i) => (
           <Fragment key={i}>

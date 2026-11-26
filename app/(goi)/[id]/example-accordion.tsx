@@ -7,24 +7,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { JapaneseExample } from "@/lib/gemini-service";
-import { saveExampleAction } from "./actions";
-import toast from "react-hot-toast";
+import { Reibun } from "@/db/schema";
 import { useState } from "react";
-
-type SaveExample = {
-  english: string;
-  indonesian: string;
-  japanese: string;
-  romaji: string;
-};
+import toast from "react-hot-toast";
+import { saveExampleAction } from "../actions";
+import { markExampleToExercise } from "./action";
 
 export default function ExampleAccordion({
   examples,
   goiId,
   isEnabledSavedbutton = false,
 }: {
-  examples: JapaneseExample[];
+  examples: Reibun[];
   goiId: string;
   isEnabledSavedbutton?: boolean;
 }) {
@@ -33,12 +27,36 @@ export default function ExampleAccordion({
     value: `item-${i}`,
   }));
 
+  const handleMarkExample = async ({
+    english,
+    id,
+    indonesian,
+    japanese,
+  }: Pick<Reibun, "id" | "english" | "indonesian" | "japanese">) => {
+    await markExampleToExercise({
+      english,
+      id,
+      japanese,
+      indonesian,
+    });
+  };
+
   return (
     <Accordion multiple className="w-full text-xl">
       {updatedExamples.map(
-        ({ english, indonesian, japanese, romaji, value }, i) => (
+        ({ english, indonesian, japanese, romaji, value, id }, i) => (
           <AccordionItem key={value} value={value}>
-            <AccordionTrigger className="text-base select-text">
+            <AccordionTrigger
+              onClick={() =>
+                handleMarkExample({
+                  english,
+                  id,
+                  indonesian,
+                  japanese,
+                })
+              }
+              className="text-base select-text"
+            >
               <span className="pr-4">{i + 1}.</span>
               {indonesian}
             </AccordionTrigger>
@@ -66,7 +84,7 @@ function SaveExampleButton({
   data: { english, indonesian, japanese, romaji },
   goiId,
 }: {
-  data: SaveExample;
+  data: Pick<Reibun, "english" | "indonesian" | "japanese" | "romaji">;
   goiId: string;
 }) {
   const [loading, setLoading] = useState(false);

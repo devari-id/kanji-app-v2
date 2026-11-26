@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import TabGoi from "./tab-goi";
 import { JapaneseExample } from "@/lib/gemini-service";
 import { getWordExamples } from "./queries";
+import { Reibun } from "@/db/schema";
 
 export default async function GoiDetailPage({
   params,
@@ -22,7 +23,6 @@ export default async function GoiDetailPage({
     </div>
   );
 }
-
 
 async function SusFormEdit({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -47,12 +47,6 @@ async function SusTabGoiExample({
   }
 
   const storedExamples = await getWordExamples(id);
-  const mappedExamples: JapaneseExample[] = storedExamples.map((v) => ({
-    english: v.english,
-    indonesian: v.indonesian,
-    japanese: v.japanese,
-    romaji: v.romaji,
-  }));
 
-  return <TabGoi tango={goi} key={goi.id} examples={mappedExamples} />;
+  return <TabGoi tango={goi} key={goi.id} examples={storedExamples} />;
 }

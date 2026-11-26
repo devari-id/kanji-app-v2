@@ -1,18 +1,18 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Goi } from "@/db/schema";
+import { Goi, Reibun } from "@/db/schema";
 import { JapaneseExample } from "@/lib/gemini-service";
 import { OctagonAlert } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";
-import ExampleAccordion from "../example-accordion";
+import ExampleAccordion from "./example-accordion";
 import GenerateExampleWithGeminiButton from "../generate-example-button";
 import FormExample from "./form-example";
 
 type Props = {
   tango: Goi;
-  examples: JapaneseExample[];
+  examples: Reibun[];
 };
 
 export default function TabGoi({ tango, examples }: Props) {

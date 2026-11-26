@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { generateExampleAction } from "./actions";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import ExampleAccordion from "./example-accordion";
+import ExampleAccordion from "./[id]/example-accordion";
 
 export default function GenerateExampleWithGeminiButton({ goi }: { goi: Goi }) {
   const [examples, setExamples] = useState<JapaneseExample[]>([]);
