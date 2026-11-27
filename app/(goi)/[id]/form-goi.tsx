@@ -4,7 +4,7 @@ import { Goi } from "@/db/schema";
 import { useAction } from "next-safe-action/hooks";
 import { SubmitEvent, useRef } from "react";
 import toast from "react-hot-toast";
-import { removeGoiAction, saveGoiAction, updateGoiAction } from "./actions";
+import { removeGoiAction, saveGoiAction, updateGoiAction } from "../actions";
 
 type Props = {
   tango?: Goi;
@@ -78,7 +78,7 @@ export default function FormGoi({ tango }: Props) {
             name="kanji"
             defaultValue={tango?.kanji}
             placeholder="漢字"
-            className="outline-none border-none h-full text-5xl px-4 bg-foreground/20 box-border w-full"
+            className="outline-none font-mincho border-none h-full text-5xl px-4 bg-foreground/20 box-border w-full"
           />
         </div>
         <div className="flex flex-1 flex-col h-full gap-y-1">
@@ -87,20 +87,20 @@ export default function FormGoi({ tango }: Props) {
             name="furigana"
             defaultValue={tango?.furigana}
             placeholder="ふりがな"
-            className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
+            className="outline-none font-mincho border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
           <input
             type="text"
             name="meaning"
             defaultValue={tango?.meaning}
             placeholder="意味"
-            className="outline-none border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
+            className="outline-none font-mincho border-none text-base h-full px-3 bg-foreground/20 w-full box-border"
           />
         </div>
         <div className="flex flex-col items-center h-full gap-x-1">
           <button
             type="submit"
-            className="bg-rose-500 font-medium hover:bg-rose-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-15"
+            className="bg-rose-500 font-medium font-mincho hover:bg-rose-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-15"
           >
             保存
           </button>
@@ -109,7 +109,7 @@ export default function FormGoi({ tango }: Props) {
               disabled={isPendingRemovetango}
               type="button"
               onClick={() => executeRemovetango({ id: tango.id })}
-              className="bg-amber-500 font-medium hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
+              className="bg-amber-500 font-medium font-mincho hover:bg-amber-700 transition-all ease-linear duration-200 text-background hover:text-white h-full w-full"
             >
               削除
             </button>

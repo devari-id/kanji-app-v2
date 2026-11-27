@@ -43,8 +43,6 @@ export const removeGoiAction = actionClient
 export const saveGoiAction = actionClient
   .inputSchema(saveGoiSchema)
   .action(async ({ parsedInput: { furigana, kanji, meaning } }) => {
-    console.log({ furigana, kanji, meaning });
-
     try {
       await db
         .insert(goiTable)

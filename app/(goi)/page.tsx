@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import DialogForm from "./dialog-add-tango";
 import { GoiItem } from "./goi-item";
 import { getAllVocabs } from "./queries";
-import InputLimit from "./input-limit";
+import GoiList from "./goi-list";
 
 export default async function HomePage({
   searchParams,
@@ -38,9 +38,7 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
         <div className="p-4">
           <DialogForm />
         </div>
-        {data.map((e, i) => (
-          <GoiItem item={e} key={e.id ?? i} />
-        ))}
+        <GoiList goi={data} key={normalizedPage} />
       </div>
     </div>
   );

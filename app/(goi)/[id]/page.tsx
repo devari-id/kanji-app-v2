@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import FormGoi from "../form-goi";
+import FormGoi from "./form-goi";
 import { getWordById } from "../queries";
 import { redirect } from "next/navigation";
 import TabGoi from "./tab-goi";

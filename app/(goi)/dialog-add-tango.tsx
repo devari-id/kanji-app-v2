@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { FormEvent, useId, useState } from "react";
-import { saveGoiAction } from "./actions";
+import { SubmitEvent, useId, useState } from "react";
 import toast from "react-hot-toast";
+import { saveGoiAction } from "./actions";
 
 export default function DialogForm() {
   const [open, setOpen] = useState(false);
@@ -37,10 +37,8 @@ export default function DialogForm() {
     },
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submit triggered");
-
     execute(new FormData(e.currentTarget));
   };
 

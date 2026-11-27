@@ -1,7 +1,6 @@
 import { cacheKeys } from "@/cache-key";
 import { db } from "@/db";
 import { goiTable } from "@/db/schema";
-import { sql } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 
 export const findVocabsByKanjiComponent = async (kanji: string) => {
@@ -23,7 +22,7 @@ type GetAllVocabsParams = {
 
 export const getAllVocabs = async ({
   page = 1,
-  limit = 100,
+  limit = 50,
 }: GetAllVocabsParams = {}) => {
   "use cache";
   cacheTag(cacheKeys.goi.all);

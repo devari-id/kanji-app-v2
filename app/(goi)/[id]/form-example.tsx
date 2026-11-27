@@ -66,7 +66,7 @@ const InputExample = ({ label, name }: { label: string; name: string }) => {
   return (
     <Field>
       <InputGroup>
-        <InputGroupInput id={id} name={name} />
+        <InputGroupInput id={id} name={name} className="font-mincho" />
         <InputGroupAddon>
           <InputGroupText>{label}</InputGroupText>
         </InputGroupAddon>

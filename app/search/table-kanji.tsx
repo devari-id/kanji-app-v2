@@ -14,7 +14,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { KanjiItem } from "@/db/schema";
 import { ChangeEvent, use, useState } from "react";
 import toast from "react-hot-toast";
-import { removeKanjiAction, updateKanjiAction } from "./action";
+import {
+  removeKanjiAction,
+  saveKanjiAction,
+  updateKanjiAction,
+} from "./action";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   promiseKanjis: Promise<KanjiItem[]>;
@@ -22,6 +27,10 @@ type Props = {
 
 export default function TableKanji({ promiseKanjis }: Props) {
   const kanjis = use(promiseKanjis);
+  const sp = useSearchParams();
+  const query = sp.get("query") as string;
+
+  const splitedQuery = query.split("");
 
   return (
     <Table>
@@ -36,26 +45,32 @@ export default function TableKanji({ promiseKanjis }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {kanjis.length === 0 ? (
-          <TableRow>
-            <td className="py-4">Kanji record not found</td>
-          </TableRow>
-        ) : (
-          kanjis.map((kanji) => <TableContent kanji={kanji} key={kanji.id} />)
-        )}
+        {splitedQuery.map((kanji, i) => (
+          <TableContent
+            kanji={kanjis.find((k) => k.kanji === kanji)}
+            key={i}
+            kanjiFromUrl={kanji}
+          />
+        ))}
       </TableBody>
     </Table>
   );
 }
 
-function TableContent({ kanji }: { kanji: KanjiItem }) {
+function TableContent({
+  kanji,
+  kanjiFromUrl,
+}: {
+  kanji?: KanjiItem;
+  kanjiFromUrl: string;
+}) {
   const [state, setState] = useState({
-    kanji: kanji.kanji,
-    onyomi: kanji.onyomi ?? "",
-    kunyomi: kanji.kunyomi ?? "",
-    note: kanji.note ?? "",
-    meaning: kanji.meaning,
-    id: kanji.id,
+    kanji: kanjiFromUrl,
+    onyomi: kanji?.onyomi ?? "",
+    kunyomi: kanji?.kunyomi ?? "",
+    note: kanji?.note ?? "",
+    meaning: kanji?.meaning ?? "",
+    id: kanji?.id,
   });
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -66,8 +81,11 @@ function TableContent({ kanji }: { kanji: KanjiItem }) {
   };
 
   const handleUpdateKanji = async () => {
-    const { data, serverError, validationErrors } =
-      await updateKanjiAction(state);
+    if (!state.id) return;
+    const { data, serverError, validationErrors } = await updateKanjiAction({
+      ...state,
+      id: state.id,
+    });
     if (serverError) {
       toast.error(serverError);
     }
@@ -80,8 +98,9 @@ function TableContent({ kanji }: { kanji: KanjiItem }) {
   };
 
   const handleRemoveKanji = async () => {
+    if (!state.id) return;
     const { data, serverError, validationErrors } = await removeKanjiAction({
-      kanjiId: kanji.id,
+      kanjiId: state.id,
     });
     if (serverError) {
       toast.error(serverError);
@@ -94,9 +113,33 @@ function TableContent({ kanji }: { kanji: KanjiItem }) {
     }
   };
 
+  const handleSaveKanji = async () => {
+    const { kanji, kunyomi, meaning, note, onyomi } = state;
+    const { data, serverError, validationErrors } = await saveKanjiAction({
+      kanji,
+      meaning,
+      kunyomi,
+      note,
+      onyomi,
+    });
+    if (serverError) {
+      toast.error(serverError);
+    }
+    if (validationErrors) {
+      toast.error("invalid input");
+    }
+    if (data) {
+      setState({
+        ...state,
+        id: data.newKanji.id,
+      });
+      toast.success(data.message);
+    }
+  };
+
   return (
-    <TableRow key={kanji.id}>
-      <TableCell className="text-4xl font-mincho">{kanji.kanji}</TableCell>
+    <TableRow>
+      <TableCell className="text-4xl font-mincho">{kanjiFromUrl}</TableCell>
       <TableCell>
         <Field>
           <Textarea
@@ -140,14 +183,20 @@ function TableContent({ kanji }: { kanji: KanjiItem }) {
         </Field>
       </TableCell>
       <TableCell align="right">
-        <Button onClick={handleUpdateKanji}>Edit</Button>
-        <Button
-          onClick={handleRemoveKanji}
-          className={"ml-2"}
-          variant={"destructive"}
-        >
-          Delete
-        </Button>
+        {state.id ? (
+          <>
+            <Button onClick={handleUpdateKanji}>Edit</Button>
+            <Button
+              onClick={handleRemoveKanji}
+              className={"ml-2"}
+              variant={"destructive"}
+            >
+              Delete
+            </Button>
+          </>
+        ) : (
+          <Button onClick={handleSaveKanji}>Save</Button>
+        )}
       </TableCell>
     </TableRow>
   );
