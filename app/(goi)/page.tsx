@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import DialogForm from "./dialog-add-tango";
 import { GoiItem } from "./goi-item";
 import { getAllVocabs } from "./queries";
+import InputLimit from "./input-limit";
 
 export default async function HomePage({
   searchParams,
@@ -23,8 +24,17 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
   const { data, pagination } = await getAllVocabs({ page: normalizedPage });
 
   return (
-    <div className="flex flex-col h-full my-8 flex-1">
-      <div className="flex flex-wrap gap-x-8 px-2 items-center flex-1 mb-8">
+    <div className="flex flex-col h-full flex-1">
+      <div className="mb-4 flex items-center justify-between px-4">
+        {/* <div className="border w-max">
+          <InputLimit />
+        </div> */}
+        <div className="flex-1">
+          <AppPagination data={pagination} />
+        </div>
+        {/* <div className="w-max flex-none border">Total: {pagination.total}</div> */}
+      </div>
+      <div className="flex flex-wrap gap-x-4 px-2 items-center flex-1">
         <div className="p-4">
           <DialogForm />
         </div>
@@ -32,7 +42,6 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
           <GoiItem item={e} key={e.id ?? i} />
         ))}
       </div>
-      <AppPagination data={pagination} />
     </div>
   );
 }

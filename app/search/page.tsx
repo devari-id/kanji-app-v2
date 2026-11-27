@@ -11,7 +11,7 @@ export default function SearchKanjiPage({
   searchParams: SearchParams;
 }) {
   return (
-    <div className="pace-y-4 my-4">
+    <div className="my-4 space-y-4">
       <Suspense>
         <SusKanji sp={searchParams} />
       </Suspense>
@@ -27,17 +27,9 @@ async function SusKanji({ sp }: { sp: SearchParams }) {
   if (!query || typeof query !== "string") {
     redirect("/");
   }
-
   const kanjis = findKanjisByKanji(query);
-
   return (
-    <div className="space-y-4">
-      <div className="mb-4 flex justify-center">
-        <h1 className="font-medium">
-          Search result :
-          <span className="pl-2 underline underline-offset-4">{query}</span>
-        </h1>
-      </div>
+    <div className="px-2 border mx-4 rounded">
       <TableKanji promiseKanjis={kanjis} key={query} />
     </div>
   );
@@ -50,7 +42,7 @@ async function SusGoi({ sp }: { sp: SearchParams }) {
   }
   const goi = await findGoiByKanji(query);
   return (
-    <div className="flex flex-wrap gap-4 border-foreground/20 my-8">
+    <div className="flex flex-wrap gap-4 border-foreground/20">
       {goi.map((e, i) => (
         <GoiItem item={e} key={e.id ?? i} />
       ))}
